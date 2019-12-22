@@ -57,4 +57,24 @@
     <servlet-name>UnauthorizedServlet</servlet-name>
     <url-pattern>/UnauthorizedServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>MoviesServlet</display-name>
+    <servlet-name>MoviesServlet</servlet-name>
+    <servlet-class>cinema.servlet.MoviesServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MoviesServlet</servlet-name>
+    <url-pattern>/MoviesServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>SearchMoviesServlet</display-name>
+    <servlet-name>SearchMoviesServlet</servlet-name>
+    <servlet-class>cinema.servlet.SearchMoviesServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SearchMoviesServlet</servlet-name>
+    <url-pattern>/SearchMoviesServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

@@ -1,0 +1,30 @@
+body {
+	background-color: #222;
+}
+
+a {
+	display: block;
+}
+
+.buttonAsLink {
+     background:none!important;
+     border:none; 
+     cursor: pointer;
+     color: white;
+}
+
+#LoginForm, #RegisterForm {
+	text-align: center;
+	width: 25%;
+}
+
+#moviesTable {
+	width: 75%;
+	text-align: center;
+	background-color: white;
+}
+
+
+label {
+	color: white;
+}

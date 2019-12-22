@@ -25,7 +25,7 @@ CREATE TABLE movies (
 
 	id INTEGER PRIMARY KEY,
 	title VARCHAR(50) NOT NULL,
-	duration TIME NOT NULL,
+	duration VARCHAR(10) NOT NULL,
 	distributor VARCHAR(50) NOT NULL,
 	origincountry VARCHAR(50) NOT NULL,
 	yearofproduction INT NOT NULL
@@ -42,7 +42,7 @@ CREATE TABLE projection_types (
 	id INTEGER PRIMARY KEY,
 	name VARCHAR(3) NOT NULL
 	
-)
+);
 
 INSERT INTO projection_types (name) VALUES ('2D');
 INSERT INTO projection_types (name) VALUES ('3D');
@@ -55,7 +55,7 @@ CREATE TABLE theaters (
 	projectiontype INT NOT NULL,
 	FOREIGN KEY (projectiontype) references projection_types(id) ON DELETE RESTRICT
 
-)
+);
 
 INSERT INTO theaters (name, projectiontype) VALUES ('A', 1);
 INSERT INTO theaters (name, projectiontype) VALUES ('B', 2);
@@ -67,7 +67,7 @@ CREATE TABLE seats (
 	theater INT NOT NULL,
 	FOREIGN KEY (theater) references theaters(id) ON DELETE RESTRICT
 
-)
+);
 
 INSERT INTO seats (number, theater) VALUES (1, 1);
 INSERT INTO seats (number, theater) VALUES (2, 1);
@@ -90,7 +90,7 @@ CREATE TABLE projections (
 	FOREIGN KEY (admincreator) references users(username) ON DELETE RESTRICT
 	
 
-)
+);
 
 INSERT INTO projections (movie, projectiontype, theater, dateandtime, ticketprice, admincreator) VALUES (1, 2, 1, '2020-03-01 12:46', 400, 'a');
 
