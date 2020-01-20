@@ -1,24 +1,14 @@
+
 var MoviesManager = {
-//		
-//		
-//		
+		
 		getAll : function() {
 			$.get('MoviesServlet', function(data) {
 				$('#moviesTable1').DataTable({
 					"paging": false,
 					"info": false,
 					"searching": false
-				});
+					});
 				for(m in data.movies) {
-//					table.body().append(
-//						'<tr>' +
-//							'<td>'+ data.movies[m].title + '</td>' +
-//							'<td>'+ data.movies[m].duration + '</td>' +
-//							'<td>'+ data.movies[m].distributor + '</td>' +
-//							'<td>'+ data.movies[m].originCountry + '</td>' +
-//							'<td>'+ data.movies[m].yearOfProduction + '</td>' +
-//						'</tr>'
-//					);
 					$('#moviesTable1').dataTable().fnAddData ([
 						data.movies[m].title,
 						data.movies[m].duration,
@@ -29,8 +19,31 @@ var MoviesManager = {
 				}
 				
 			});
+		},
+
+		searchMovies : function() {
+			var $searchOptionBox = $('#searchOptionsBox').find('option:selected');
+			var searchMovieInput = $('#searchMovieInput').val();
+			var params = {
+					'searchOptionsBox': $searchOptionBox.val(),
+					'searchMovieInput': searchMovieInput
+			};
+			$('#moviesTable1').dataTable().fnClearTable();
+			$.get('SearchMoviesServlet', params, function(data) {
+				for(m in data.filteredMovies) {
+					$('#moviesTable1').dataTable().fnAddData ([
+						data.filteredMovies[m].title,
+						data.filteredMovies[m].duration,
+						data.filteredMovies[m].distributor,
+						data.filteredMovies[m].originCountry,
+						data.filteredMovies[m].yearOfProduction	
+						]);
+					
+				}
+			});
+			
+			
 		}
-//		
 }
 
 
@@ -76,8 +89,6 @@ var StateManager = {
 			
 		}
 		
-		
-
 }
 
 
@@ -87,11 +98,18 @@ $(document).ready(function() {
 	
 	StateManager.initState();
 	
-	
-	
 	MoviesManager.getAll();
 	
+	$('#searchMovieBtn').click(function(e) {
+		e.preventDefault();
+		MoviesManager.searchMovies();
+	});
 	
+	$('#btnConfirmLogin').click(function(e) {
+		e.preventDefault();
+		MoviesManager.searchMovies();
+		console.log('login');
+	});
 	
 	$('#LoginBtn').click(function(e) {
 		e.preventDefault();

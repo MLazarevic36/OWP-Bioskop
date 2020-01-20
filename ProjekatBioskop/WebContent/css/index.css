@@ -24,6 +24,31 @@ a {
 	background-color: white;
 }
 
+#moviesSearchBox {
+	width:100%;
+	overflow:hidden;
+	position:relative;
+}
+
+
+#searchOptions {
+
+	float:left;
+	position:relative;
+}
+
+ #searchMovieInputBox {
+
+ 	float:left;
+ 	position:relative;
+ 
+ }
+ 
+ #searchMovieBtnBox {
+
+ 	float:right;
+ 	position:relative;
+ }
 
 label {
 	color: white;

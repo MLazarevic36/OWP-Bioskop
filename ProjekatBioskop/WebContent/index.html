@@ -56,19 +56,23 @@
 	
 	<div id="moviesTable">
 	
-		<div class="col-md-2 text-center">
-			<div class="col-md-3 text-center">
-	      		<select id="searchOptions" name="searchOptions" class="browser-default custom-select">
+		<div class="col-md-2 text-center" id="moviesSearchBox">
+			<div class="col-md-3 text-center" id="searchOptions">
+	      		<select id="searchOptionsBox" name="searchOptionsBox" class="browser-default custom-select">
 		  			<option value="title">Title</option>
 		  			<option value="distributor">Distributor</option>
 		  			<option value="originCountry">Origin country</option>
 		  			<option value="yearOfProduction">Year of production</option>
 				</select>
 	      	</div>
+	      	<div id="searchMovieInputBox">
 				<input id="searchMovieInput" type="text" class="form-control">
-	      		<button class="button btn1" id="searchMovieBtn" type="submit">Search</button>
+			</div>
+			<div id="searchMovieBtnBox">
+	      		<button class="btn btn-primary" type="submit" id="searchMovieBtn">Search</button>
+	      	</div>
 	    </div>	
-		<table id="moviesTable1" class="table table-striped table-bordered">
+	    <table id="moviesTable1" class="table table-striped table-bordered">
 			<thead>
 				<tr>
 					<th>Title</th>
@@ -82,6 +86,7 @@
 			
 			</tbody>
 		</table>
+
 	</div>
 	
 	
