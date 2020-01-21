@@ -52,7 +52,25 @@
 		<button id="btnConfirmRegister" class="btn btn-success">Register</button>
 	</div>
 	
-	
+	<div id="moviesSection">
+		<button id="addNewMovie" class="btn btn-primary">Add movie</button>
+		<br>
+		<div id="addMovieForm" class="form-group">
+		<label>Please submit following data to add new movie:</label>
+		<br>
+		<label>Title</label>
+		<input id="newMovieTitle" type="text" class="form-control">
+		<label>Duration</label>
+		<input id="newMovieDuration" type="text" placeholder="00:00" class="form-control">
+		<label>Distributor</label>
+		<input id="newMovieDistributor" type="text" class="form-control">
+		<label>Origin country</label>
+		<input id="newMovieOriginCountry" type="text" class="form-control">
+		<label>Year of production</label>
+		<input id="newMovieYearOfProduction" type="text" placeholder="2020" class="form-control">
+		<button id="submitNewMovie" class="btn btn-primary" type="submit">Submit</button>
+		</div>
+		<br>
 	
 	<div id="moviesTable">
 	
@@ -72,7 +90,7 @@
 	      		<button class="btn btn-primary" type="submit" id="searchMovieBtn">Search</button>
 	      	</div>
 	    </div>	
-	    <table id="moviesTable1" class="table table-striped table-bordered">
+	    <table id="moviesTable1" class="table table-striped table-bordered" style="width:100%">
 			<thead>
 				<tr>
 					<th>Title</th>
@@ -80,6 +98,7 @@
 					<th>Distributor</th>
 					<th>Origin country</th>
 					<th>Year of production</th>
+					<th></th>
 				</tr>		
 			</thead>
 			<tbody id="moviesTbody">
@@ -88,7 +107,7 @@
 		</table>
 
 	</div>
-	
+	</div>
 	
 	
 	

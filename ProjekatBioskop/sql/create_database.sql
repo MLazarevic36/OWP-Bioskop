@@ -36,6 +36,12 @@ CREATE TABLE movies (
 INSERT INTO movies (title, duration, distributor, origincountry, yearofproduction) VALUES ('The Irishman', '03:37', 'Netflix', 'United States', '2019');
 INSERT INTO movies (title, duration, distributor, origincountry, yearofproduction) VALUES ('Joker', '02:02', 'Warner Bros. Pictures', 'United States', '2019');
 INSERT INTO movies (title, duration, distributor, origincountry, yearofproduction) VALUES ('The Lion King', '01:58', 'Walt Disney Studios', 'United States', '2019');
+INSERT INTO movies (title, duration, distributor, origincountry, yearofproduction) VALUES ('Bad Boys for Life', '02:04', 'Columbia Pictures', 'United States', '2020');
+INSERT INTO movies (title, duration, distributor, origincountry, yearofproduction) VALUES ('Parasite', '02:12', 'Barunson Entertainment', 'South Korea', '2019');
+INSERT INTO movies (title, duration, distributor, origincountry, yearofproduction) VALUES ('Birds of Prey', '01:49', 'DC Entertainment', 'United States', '2020');
+INSERT INTO movies (title, duration, distributor, origincountry, yearofproduction) VALUES ('Underwater', '01:35', '20th Century Fox', 'United States', '2020');
+INSERT INTO movies (title, duration, distributor, origincountry, yearofproduction) VALUES ('Jumanji', '02:03', 'Hartbeat Productioins', 'United States', '2019');
+INSERT INTO movies (title, duration, distributor, origincountry, yearofproduction) VALUES ('A fall from Grace', '01:55', 'Tyler Perry Studios', 'United States', '2020');
 
 CREATE TABLE projection_types (
 

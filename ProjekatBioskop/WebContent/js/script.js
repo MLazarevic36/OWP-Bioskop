@@ -4,20 +4,30 @@ var MoviesManager = {
 		getAll : function() {
 			$.get('MoviesServlet', function(data) {
 				$('#moviesTable1').DataTable({
-					"paging": false,
-					"info": false,
-					"searching": false
-					});
-				for(m in data.movies) {
-					$('#moviesTable1').dataTable().fnAddData ([
-						data.movies[m].title,
-						data.movies[m].duration,
-						data.movies[m].distributor,
-						data.movies[m].originCountry,
-						data.movies[m].yearOfProduction	
-					]);
-				}
-				
+					data: data.movies,
+					paging: false,
+					info: false,
+					searching: false,
+					autoWidth: true,
+					columns: [
+						{data : 'title'},
+						{data : 'duration'},
+						{data : 'distributor'},
+						{data : 'originCountry'},
+						{data : 'yearOfProduction'},
+						{
+							"data": null,
+							render:function(data, type, row)
+							{
+								
+								return '<button id="deleteMovie" data-id="' + data.id + '">Delete</button>'
+								
+							},
+							"targets": -1
+						}
+					]
+				})
+	
 			});
 		},
 
@@ -41,7 +51,36 @@ var MoviesManager = {
 					
 				}
 			});
+		},
+		
+		addMovie : function() {
+			var title = $('#newMovieTitle').val();
+			var duration = $('#newMovieDuration').val();
+			var distributor = $('#newMovieDistributor').val();
+			var originCountry = $('#newMovieOriginCountry').val();
+			var yearOfProduction = $('#newMovieYearOfProduction').val();
+			params = {
+					'action': 'add',
+					'title': title,
+					'duration': duration,
+					'distributor': distributor,
+					'originCountry': originCountry,
+					'yearOfProduction': yearOfProduction
+			};
+			$.post('MoviesServlet', params, function(data) {
+				console.log(data);
+			});
 			
+		},
+		
+		deleteMovie : function(ID) {
+			params = {
+					'action': 'delete',
+					'id': ID
+			};
+			$.post('MoviesServlet', params, function(data){
+				console.log(data);
+			});
 			
 		}
 }
@@ -58,7 +97,7 @@ var StateManager = {
 			$('#LogoutBtn').hide();
 			$('#LoginForm').hide();
 			$('#RegisterForm').hide();
-			$('#moviesTable').hide();
+			$('#moviesSection').hide();
 		},
 		
 		loggingState: function(){
@@ -67,7 +106,7 @@ var StateManager = {
 			$('#LogoutBtn').hide();
 			$('#LoginForm').show();
 			$('#RegisterForm').hide();
-			$('#moviesTable').hide();
+			$('#moviesSection').hide();
 		},
 		
 		registerState: function(){
@@ -76,7 +115,7 @@ var StateManager = {
 			$('#LogoutBtn').hide();
 			$('#LoginForm').hide();
 			$('#RegisterForm').show();
-			$('#moviesTable').hide();
+			$('#moviesSection').hide();
 		},
 		
 		moviesState: function() {
@@ -85,7 +124,8 @@ var StateManager = {
 			$('#LogoutBtn').hide();
 			$('#LoginForm').hide();
 			$('#RegisterForm').hide();
-			$('#moviesTable').show();
+			$('#moviesSection').show();
+			$('#addMovieForm').hide();
 			
 		}
 		
@@ -104,6 +144,15 @@ $(document).ready(function() {
 		e.preventDefault();
 		MoviesManager.searchMovies();
 	});
+	
+	$('#addNewMovie').click(function(e) {
+		$('#addMovieForm').toggle();
+	});
+	
+	$('#submitNewMovie').click(function(e) {
+		e.preventDefault();
+		MoviesManager.addMovie();
+	})
 	
 	$('#btnConfirmLogin').click(function(e) {
 		e.preventDefault();
@@ -125,6 +174,17 @@ $(document).ready(function() {
 		e.preventDefault();
 		StateManager.registerState();
 	});
+	
+	
+    $('body').on('click', '#deleteMovie', function(e){
+        var id= $(this).attr("data-id");
+        MoviesManager.deleteMovie(id);
+        $(this).parents("tr").remove();
+        $('#moviesTable1').dataTable().fnDestroy();
+        MoviesManager.getAll();
+        
+        
+    });
 	
 	
 	

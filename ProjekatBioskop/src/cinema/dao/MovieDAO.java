@@ -262,5 +262,52 @@ public class MovieDAO {
 		
 	}
 	
+	public static boolean addMovie(Movie movie) {
+		Connection con = ConnectionManager.getConnection();
+		PreparedStatement ps = null;
+		
+		try {
+			String query = "INSERT INTO movies (title, duration, distributor, origincountry, yearofproduction) "
+							+ "VALUES (?, ?, ?, ?, ?)";
+			ps = con.prepareStatement(query);
+			int index = 1;
+			ps.setString(index++, movie.getTitle());
+			ps.setString(index++, movie.getDuration());
+			ps.setString(index++, movie.getDistributor());
+			ps.setString(index++, movie.getOriginCountry());
+			ps.setInt(index++, movie.getYearOfProduction());
+			
+			return ps.executeUpdate() == 1;
+		}catch (Exception ex) {
+			ex.printStackTrace();
+		}finally {
+			try {ps.close();} catch (Exception ex1) {ex1.printStackTrace();}
+			try {con.close();} catch (Exception ex1) {ex1.printStackTrace();}
+		}
+		
+		return false;
+	}
+	
+	public static boolean delete(Integer id) {
+		Connection con = ConnectionManager.getConnection();
+		PreparedStatement ps = null;
+		
+		try {
+			
+			String query = "DELETE FROM movies WHERE id = ?";
+			ps = con.prepareStatement(query);
+			ps.setInt(1, id);
+			
+			return ps.executeUpdate() == 1;
+			
+		}catch (Exception ex){
+			ex.printStackTrace();
+		}finally {
+			try {ps.close();} catch (Exception ex1) {ex1.printStackTrace();}
+		}
+		
+		return false;
+	}
+	
 	
 }

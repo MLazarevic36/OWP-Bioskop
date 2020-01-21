@@ -38,8 +38,37 @@ public class MoviesServlet extends HttpServlet {
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		
+		String action = request.getParameter("action");
+		
+		try {
+			switch(action) {
+			case "add": {
+				String title = request.getParameter("title");
+				String duration = request.getParameter("duration");
+				String distributor = request.getParameter("distributor");
+				String originCountry = request.getParameter("originCountry");
+				String yearOfProduction = request.getParameter("yearOfProduction");
+				
+				Movie movie = new Movie();
+				movie.setTitle(title);
+				movie.setDuration(duration);
+				movie.setDistributor(distributor);
+				movie.setOriginCountry(originCountry);
+				movie.setYearOfProduction(Integer.parseInt(yearOfProduction));
+				MovieDAO.addMovie(movie);
+				break;
+			}
+			case "delete": {
+				Integer id = Integer.parseInt(request.getParameter("id"));
+				MovieDAO.delete(id);
+				break;
+			}
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		
 	}
 
 }
