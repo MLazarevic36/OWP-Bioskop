@@ -108,8 +108,54 @@
 
 	</div>
 	</div>
-	
-	
+	<div id="movieDetail" class="flex-container">
+		<div class="inner-element">
+			<label style="font-size: 20px" id="movieTitle"></label>
+		</div>
+		<div class="inner-element">
+			<label id="movieDuration"></label>
+		</div>
+		<br>
+		<div class="inner-element">
+			<label id="movieDistributor"></label>
+		</div>
+		<br>
+		<div class="inner-element">
+			<label id="movieOriginCountry"></label>
+		</div>
+		<br>
+		<div class="inner-element">
+			<label id="movieYearOfProduction"></label>
+		</div>
+	</div>
+	<br>
+	<div id="movieCommands" class="flex-container">
+		<div>
+			<button id="deleteMovieFromDetail">Delete</button>
+		</div>
+		<div>
+			<button id="updateMovieFromDetail">Update</button>
+		</div>
+		<br>
+		<br>
+		<br>
+		<div id="updateMovieForm" class="form-group">
+			<label>Please submit following data to update current movie:</label>
+		<br>
+			<label>Title</label>
+			<input id="updatedMovieTitle" type="text" class="form-control" placeholder="">
+			<label>Duration</label>
+			<input id="updatedMovieDuration" type="text" placeholder="" class="form-control">
+			<label>Distributor</label>
+			<input id="updatedMovieDistributor" type="text" placeholder="" class="form-control">
+			<label>Origin country</label>
+			<input id="updatedMovieOriginCountry" type="text" placeholder="" class="form-control">
+			<label>Year of production</label>
+			<input id="updatedMovieYearOfProduction" type="text" placeholder="" class="form-control">
+			<button id="updateMovie" class="btn btn-primary">Submit</button>
+		</div>
+			
+		</div>	
 	
 	
 	
