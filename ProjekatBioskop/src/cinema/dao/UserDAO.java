@@ -19,7 +19,7 @@ public class UserDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			String query = "SELECT role, registrationdate FROM users WHERE username = ? AND password = ?";
+			String query = "SELECT id, role, registrationdate FROM users WHERE username = ? AND password = ?";
 			ps = con.prepareStatement(query);
 			int index = 1;
 			ps.setString(index++, username);
@@ -27,11 +27,12 @@ public class UserDAO {
 			rs = ps.executeQuery();
 			
 			if (rs.next()) {
-				Role role = Role.valueOf(rs.getString(1));
-				String registrationdate = rs.getString(2);
+				Integer id = rs.getInt(1);
+				Role role = Role.valueOf(rs.getString(2));
+				String registrationdate = rs.getString(3);
 				Timestamp regdate = (Timestamp) DATETIME_FORMAT.parse(registrationdate);
 				
-				return new User(username, password, regdate, role);
+				return new User(id, username, password, regdate, role);
 			}
 		} finally {
 			try {ps.close();} catch (Exception ex1) {ex1.printStackTrace();}

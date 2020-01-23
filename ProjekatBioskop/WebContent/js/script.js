@@ -1,3 +1,63 @@
+var ProjectionsManager = {
+		
+		getAll : function(){
+			$.get('ProjectionsServlet', function(data){
+				$('#projectionsTable1').DataTable ({
+					data: data.projections,
+					paging: false,
+					info: false,
+					searching: false,
+					autoWidth: true,
+					columns: [
+							{
+							"data": 'movie',
+							render:function(data, type, row){
+								return '<a id="movieRedirectFromProjection" data-name="' + data + '" href="#">' + data + '</a>';
+								}
+							},
+							{data : 'dateOutput'},
+							{data : 'projectionType'},
+							{data : 'theater'},
+							{data : 'ticketPrice'}
+						]
+				})
+			})
+		},
+		
+		populateMovieDropdown : function () {
+			
+			$.get('MoviesServlet', function(data){
+				var $dropdown = $('#newProjectionMovie');
+				var newData = data.movies;
+				$.each(newData, function(){
+					$dropdown.append($("<option />").val(this.id).text(this.title));
+				});
+		});
+			
+		},
+		
+		populateProjectionTypeDrowpdown: function() {
+			$.get('ProjectionTypeServlet', function(data){
+				var $dropdown = $('#newProjectionType');
+				var newData = data.projectionTypes;
+				$.each(newData, function(){
+					$dropdown.append($("<option />").val(this.id).text(this.name));
+				})
+			})
+			
+		},
+		
+		populateTheaterDropdown: function () {
+			$.get('TheaterServlet', function(data){
+				var $dropdown = $('#newProjectionTheater');
+				var newData = data.theaters;
+				$.each(newData, function(){
+					$dropdown.append($("<option />").val(this.id).text(this.name));
+				})
+			})
+		}
+}
+
 
 var MoviesManager = {
 		
@@ -24,9 +84,7 @@ var MoviesManager = {
 							"data": null,
 							render:function(data, type, row)
 							{
-								
 								return '<button id="deleteMovie" data-id="' + data.id + '">Delete</button>'
-								
 							},
 							"targets": -1
 						}
@@ -68,9 +126,7 @@ var MoviesManager = {
 								"data": null,
 								render:function(data, type, row)
 								{
-									
 									return '<button id="deleteMovie" data-id="' + data.id + '">Delete</button>'
-									
 								},
 								"targets": -1
 							}
@@ -130,11 +186,27 @@ var MoviesManager = {
 				$('#movieYearOfProduction').append('Year of production: ' + data.movie.yearOfProduction);
 				
 			} );
-			$('#movieDetail').show();
-			$('#movieCommands').show();
-			$('#updateMovieForm').hide();
-			$('#moviesSection').hide();
 			
+			
+		},
+		
+		getMovieByTitle: function(title) {
+			params = {
+				'action': 'getMovieByTitle',
+				'title': title
+			};
+			$.post('MoviesServlet', params, function(data){
+				$("#updatedMovieTitle").val(data.movie.title);
+				$("#updatedMovieDuration").val(data.movie.duration);
+				$("#updatedMovieDistributor").val(data.movie.distributor);
+				$("#updatedMovieOriginCountry").val(data.movie.originCountry);
+				$("#updatedMovieYearOfProduction").val(data.movie.yearOfProduction);
+				$('#movieTitle').append('Title: ' + data.movie.title);
+				$('#movieDuration').append('Duration: ' + data.movie.duration);
+				$('#movieDistributor').append('Distributor: ' + data.movie.distributor);
+				$('#movieOriginCountry').append('Origin country: ' + data.movie.originCountry);
+				$('#movieYearOfProduction').append('Year of production: ' + data.movie.yearOfProduction);
+			})
 		},
 		
 		updateMovie : function(ID) {
@@ -168,10 +240,6 @@ var MoviesManager = {
 		}
 }
 
-
-
-
-
 var StateManager = {
 		
 		initState : function(){
@@ -183,6 +251,7 @@ var StateManager = {
 			$('#moviesSection').hide();
 			$('#movieDetail').hide();
 			$('#movieCommands').hide();
+			$('#addProjectionForm').hide();
 		},
 		
 		loggingState: function(){
@@ -194,6 +263,7 @@ var StateManager = {
 			$('#moviesSection').hide();
 			$('#movieDetail').hide();
 			$('#movieCommands').hide();
+			$('#projectionsSection').hide();
 		},
 		
 		registerState: function(){
@@ -205,6 +275,8 @@ var StateManager = {
 			$('#moviesSection').hide();
 			$('#movieDetail').hide();
 			$('#movieCommands').hide();
+			$('#projectionsSection').hide();
+			
 		},
 		
 		moviesState: function() {
@@ -217,6 +289,7 @@ var StateManager = {
 			$('#addMovieForm').hide();
 			$('#movieDetail').hide();
 			$('#movieCommands').hide();
+			$('#projectionsSection').hide();
 			
 		}
 		
@@ -226,6 +299,11 @@ var StateManager = {
 
 
 $(document).ready(function() {
+	
+	ProjectionsManager.getAll();
+	ProjectionsManager.populateMovieDropdown();
+	ProjectionsManager.populateProjectionTypeDrowpdown();
+	ProjectionsManager.populateTheaterDropdown();
 	
 	StateManager.initState();
 	
@@ -270,6 +348,11 @@ $(document).ready(function() {
 		StateManager.registerState();
 	});
 	
+	$('#HomeBtn').click(function(e){
+		e.preventDefault();
+		location.reload();
+	});
+	
 	
     $('body').on('click', '#deleteMovie', function(e){
         var id= $(this).attr("data-id");
@@ -291,6 +374,26 @@ $(document).ready(function() {
 		$('#movieOriginCountry').text('');
 		$('#movieYearOfProduction').text('');
         MoviesManager.getMovie(id);
+        $('#movieDetail').show();
+		$('#movieCommands').show();
+		$('#updateMovieForm').hide();
+		$('#moviesSection').hide();
+    });
+    
+    $('body').on('click', '#movieRedirectFromProjection', function(e){
+        var name= $(this).attr("data-name");
+        $('#movieTitle').text('');
+		$('#movieDuration').text('');
+		$('#movieDistributor').text('');
+		$('#movieOriginCountry').text('');
+		$('#movieYearOfProduction').text('');
+		MoviesManager.getMovieByTitle(name);
+        $('#movieDetail').show();
+		$('#movieCommands').show();
+		$('#updateMovieForm').hide();
+		$('#moviesSection').hide();
+		$('#projectionsSection').hide();
+		console.log(name);
       
         
     });
@@ -324,6 +427,10 @@ $(document).ready(function() {
 		MoviesManager.getAll();
 		
 	});
+    
+    $('#addNewProjection').click(function(e) {
+    	$('#addProjectionForm').toggle();
+    });
 	
 	
 	

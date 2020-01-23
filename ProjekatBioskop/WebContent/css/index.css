@@ -42,6 +42,12 @@ a {
 	background-color: white;
 }
 
+#projectionsTable {
+	width: 100%;
+	text-align: center;
+	background-color: white;
+}
+
 #moviesSearchBox {
 	width:100%;
 	overflow:hidden;

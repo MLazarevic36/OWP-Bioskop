@@ -34,6 +34,7 @@ public class MoviesServlet extends HttpServlet {
 		response.setContentType("application/json");
 		response.getWriter().write(jsonData);
 		
+		
  	}
 
 
@@ -91,6 +92,17 @@ public class MoviesServlet extends HttpServlet {
 				movieO.put("movie", movie);
 				ObjectMapper mapper = new ObjectMapper();
 				String jsonDataMovie = mapper.writeValueAsString(movieO);
+				response.setContentType("application/json");
+				response.getWriter().write(jsonDataMovie);
+				break;
+			}
+			case "getMovieByTitle": {
+				Movie movie = MovieDAO.getByTitle(title);
+				Map<String, Object> movieObject = new HashMap<>();
+				movieObject.put("movie", movie);
+				ObjectMapper mapper = new ObjectMapper();
+				String jsonDataMovie = mapper.writeValueAsString(movieObject);
+				
 				response.setContentType("application/json");
 				response.getWriter().write(jsonDataMovie);
 				break;

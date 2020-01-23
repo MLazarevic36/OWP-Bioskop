@@ -10,11 +10,11 @@ DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
 
+	id INTEGER PRIMARY KEY,
 	username VARCHAR(10) NOT NULL,
 	password VARCHAR(10) NOT NULL,
 	registrationdate DATETIME NOT NULL,
-	role VARCHAR(5) NOT NULL DEFAULT 'USER',
-	PRIMARY KEY(username)
+	role VARCHAR(5) NOT NULL DEFAULT 'USER'
 	
 );
 
@@ -89,15 +89,15 @@ CREATE TABLE projections (
 	theater INT NOT NULL,
 	dateandtime DATETIME NOT NULL,
 	ticketprice DECIMAL(10, 2) NOT NULL DEFAULT 999.00,
-	admincreator VARCHAR(10) NOT NULL,
+	admincreator INT NOT NULL,
 	FOREIGN KEY (movie) references movies(id) ON DELETE RESTRICT,
 	FOREIGN KEY (projectiontype) references projection_types(id) ON DELETE RESTRICT,
 	FOREIGN KEY (theater) references theaters(id) ON DELETE RESTRICT,
-	FOREIGN KEY (admincreator) references users(username) ON DELETE RESTRICT
+	FOREIGN KEY (admincreator) references users(id) ON DELETE RESTRICT
 	
 
 );
 
-INSERT INTO projections (movie, projectiontype, theater, dateandtime, ticketprice, admincreator) VALUES (1, 2, 1, '2020-03-01 12:46', 400, 'a');
+INSERT INTO projections (movie, projectiontype, theater, dateandtime, ticketprice, admincreator) VALUES (1, 2, 1, '2020-03-01 12:46', 400, 1);
 
 

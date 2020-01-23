@@ -5,19 +5,20 @@ import java.util.Date;
 public class Projection {
 	
 	private Integer id;
-	private Movie movie;
-	private ProjectionType projectionType;
-	private Theater theater;
+	private String movie;
+	private String projectionType;
+	private String theater;
 	private Date dateAndTime;
 	private double ticketPrice;
-	private User adminCreator;
+	private Integer adminCreator;
+	private String dateOutput;
 	
 	public Projection() {
 		
 	}
 
-	public Projection(Integer id, Movie movie, ProjectionType projectionType, Theater theater, Date dateAndTime,
-			double ticketPrice, User adminCreator) {
+	public Projection(Integer id, String movie, String projectionType, String theater, Date dateAndTime,
+			double ticketPrice, Integer adminCreator, String dateOutput) {
 		
 		this.id = id;
 		this.movie = movie;
@@ -26,6 +27,7 @@ public class Projection {
 		this.dateAndTime = dateAndTime;
 		this.ticketPrice = ticketPrice;
 		this.adminCreator = adminCreator;
+		this.dateOutput = dateOutput;
 	}
 
 	public Integer getId() {
@@ -36,27 +38,27 @@ public class Projection {
 		this.id = id;
 	}
 
-	public Movie getMovie() {
+	public String getMovie() {
 		return movie;
 	}
 
-	public void setMovie(Movie movie) {
+	public void setMovie(String movie) {
 		this.movie = movie;
 	}
 
-	public ProjectionType getProjectionType() {
+	public String getProjectionType() {
 		return projectionType;
 	}
 
-	public void setProjectionType(ProjectionType projectionType) {
+	public void setProjectionType(String projectionType) {
 		this.projectionType = projectionType;
 	}
 
-	public Theater getTheater() {
+	public String getTheater() {
 		return theater;
 	}
 
-	public void setTheater(Theater theater) {
+	public void setTheater(String theater) {
 		this.theater = theater;
 	}
 
@@ -76,12 +78,20 @@ public class Projection {
 		this.ticketPrice = ticketPrice;
 	}
 
-	public User getAdminCreator() {
+	public Integer getAdminCreator() {
 		return adminCreator;
 	}
 
-	public void setAdminCreator(User adminCreator) {
+	public void setAdminCreator(Integer adminCreator) {
 		this.adminCreator = adminCreator;
+	}
+	
+	public String getDateOutput() {
+		return dateOutput;
+	}
+
+	public void setDateOutput(String dateOutput) {
+		this.dateOutput = dateOutput;
 	}
 	
 	

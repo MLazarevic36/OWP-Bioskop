@@ -10,13 +10,15 @@ public class User {
 	
 	public enum Role {USER, ADMIN};
 	
+	private Integer id;
 	private String username;
 	private String password;
 	private Timestamp registrationDate;
 	private Role role;
 	
-	public User(String username, String password, Timestamp registrationDate, Role role) {
+	public User(Integer id, String username, String password, Timestamp registrationDate, Role role) {
 		
+		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.registrationDate = registrationDate;
@@ -42,6 +44,14 @@ public class User {
 		return username.equals(other.username);
 	}
 
+	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setUsername(Integer id) {
+		this.id = id;
+	}
 
 	public String getUsername() {
 		return username;

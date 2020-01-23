@@ -346,6 +346,44 @@ public class MovieDAO {
 		return null;
 	}
 	
+	public static Movie getByTitle(String title) throws Exception {
+		Connection con = ConnectionManager.getConnection();
+		
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			String query = "SELECT * FROM movies WHERE title = ?";
+			
+			ps = con.prepareStatement(query);
+			ps.setString(1, title);
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				int index = 1;
+				Integer id_rs = rs.getInt(index++);
+				String title_rs = rs.getString(index++);
+				String duration_rs = rs.getString(index++);
+				String distributor_rs = rs.getString(index++);
+				String origin_country_rs = rs.getString(index++);
+				int year_of_production_rs = rs.getInt(index++);
+				
+				Movie movie = new Movie();
+				movie.setId(id_rs);
+				movie.setTitle(title_rs);
+				movie.setDuration(duration_rs);
+				movie.setDistributor(distributor_rs);
+				movie.setOriginCountry(origin_country_rs);
+				movie.setYearOfProduction(year_of_production_rs);
+				
+				return movie;
+			}
+		}finally {
+			try {ps.close();} catch (Exception ex1) {ex1.printStackTrace();}
+			try {rs.close();} catch (Exception ex1) {ex1.printStackTrace();}
+		}
+		return null;
+	}
+	
 	public static boolean update(Movie movie) throws Exception {
 		Connection con = ConnectionManager.getConnection();
 		PreparedStatement ps = null;

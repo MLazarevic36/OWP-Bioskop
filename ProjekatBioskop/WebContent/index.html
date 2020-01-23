@@ -16,6 +16,7 @@
 	<nav id="Navigation" class="navbar navbar-inverse">
 		<div class="container-fluid"> 
 			<ul class="nav navbar-nav navbar-left">
+				<li id="HomeBtn"><a href="">Home</a>
 				<li id="MoviesBtn"><a href="">Movies</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
@@ -156,6 +157,52 @@
 		</div>
 			
 		</div>	
+		
+	<div id="projectionsSection">
+		<button id="addNewProjection" class="btn btn-primary">Add projection</button>
+		<br>
+		<div id="addProjectionForm" class="form-group">
+		<label>Please submit following data to add new projection:</label>
+		<br>
+		<label>Movie</label>
+		<select id="newProjectionMovie" name="newProjectionMovie" class="browser-default custom-select">  	
+		<option>Select movie</option>	
+		</select>
+		<label>Projection type</label>
+		<select id="newProjectionType" name="newProjectionType" class="browser-default custom-select">
+		<option>Select projection type</option>  			
+		</select>
+		<label>Theater</label>
+		<select id="newProjectionTheater" name="newProjectionTheater" class="browser-default custom-select"> 
+		<option>Select theater</option>   			
+		</select>
+		<br>
+		<label>Date and time</label>
+		<input id="newProjectionDateAndTime" type="date" class="form-control" style="width:50%">
+		<label>Ticket price</label>
+		<input id="newProjectionTicketPrice" type="text" placeholder="000" class="form-control">
+		<button id="submitNewProjection" class="btn btn-primary" type="submit">Submit</button>
+		</div>
+		<br>
+	
+		<div id="projectionsTable">	
+	    <table id="projectionsTable1" class="table table-striped table-bordered" style="width:100%">
+			<thead>
+				<tr>
+					<th>Title</th>
+					<th>Date and time</th>
+					<th>Projection type</th>
+					<th>Theater</th>
+					<th>Price</th>
+					<th>Available seats</th>
+				</tr>		
+			</thead>
+			<tbody id="projectionsTbody">
+			
+			</tbody>
+		</table>
+		</div>
+	</div>
 	
 	
 	
