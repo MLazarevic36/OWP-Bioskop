@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import cinema.entity.Movie;
 import cinema.entity.ProjectionType;
 
 public class ProjectionTypeDAO {
@@ -57,6 +58,35 @@ public class ProjectionTypeDAO {
 			
 			ps = con.prepareStatement(query);
 			ps.setInt(1, id);
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				int index = 1;
+				Integer id_rs = rs.getInt(index++);
+				String name_rs = rs.getString(index++);
+				
+				ProjectionType projectionType = new ProjectionType();
+				projectionType.setId(id_rs);
+				projectionType.setName(name_rs);
+				return projectionType;
+			}
+		}finally {
+			try {ps.close();} catch (Exception ex1) {ex1.printStackTrace();}
+			try {rs.close();} catch (Exception ex1) {ex1.printStackTrace();}
+		}
+		return null;
+	}
+	
+	public static ProjectionType getByName(String name) throws Exception {
+		Connection con = ConnectionManager.getConnection();
+		
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			String query = "SELECT * FROM projection_types WHERE name = ?";
+			
+			ps = con.prepareStatement(query);
+			ps.setString(1, name);
 			rs = ps.executeQuery();
 			
 			if(rs.next()) {

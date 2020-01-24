@@ -1,28 +1,31 @@
 package cinema.entity;
-
-import java.sql.Timestamp;
+import java.util.Date;
 
 
 
 public class User {
-	
-	
 	
 	public enum Role {USER, ADMIN};
 	
 	private Integer id;
 	private String username;
 	private String password;
-	private Timestamp registrationDate;
+	private Date registrationDate;
 	private Role role;
+	private String dateOutput;
 	
-	public User(Integer id, String username, String password, Timestamp registrationDate, Role role) {
+	public User() {
+		
+	}
+	
+	public User(Integer id, String username, String password, Date registrationDate, Role role, String dateOutput) {
 		
 		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.registrationDate = registrationDate;
 		this.role = role;
+		this.dateOutput = dateOutput;
 		
 	}
 
@@ -48,8 +51,8 @@ public class User {
 	public Integer getId() {
 		return id;
 	}
-
-	public void setUsername(Integer id) {
+	
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -69,11 +72,11 @@ public class User {
 		this.password = password;
 	}
 
-	public Timestamp getRegistrationDate() {
+	public Date getRegistrationDate() {
 		return registrationDate;
 	}
 
-	public void setRegistrationDate(Timestamp registrationDate) {
+	public void setRegistrationDate(Date registrationDate) {
 		this.registrationDate = registrationDate;
 	}
 
@@ -83,6 +86,14 @@ public class User {
 
 	public void setRole(Role role) {
 		this.role = role;
+	}
+	
+	public String getDateOutput() {
+		return dateOutput;
+	}
+	
+	public void setDateOutput(String dateOutput) {
+		this.dateOutput = dateOutput;
 	}
 	
 	

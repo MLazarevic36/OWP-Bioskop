@@ -177,10 +177,14 @@
 		<option>Select theater</option>   			
 		</select>
 		<br>
-		<label>Date and time</label>
-		<input id="newProjectionDateAndTime" type="date" class="form-control" style="width:50%">
+		<label>Date</label>
+		<input id="newProjectionDate" type="date" class="form-control" style="width:25%">
+		<br>
+		<label>Time</label>
+		<input id="newProjectionTime" type="time" class="form-control" style="width:25%">
+		<br>
 		<label>Ticket price</label>
-		<input id="newProjectionTicketPrice" type="text" placeholder="000" class="form-control">
+		<input id="newProjectionTicketPrice" type="text" placeholder="000.00" style="width:25%" class="form-control">
 		<button id="submitNewProjection" class="btn btn-primary" type="submit">Submit</button>
 		</div>
 		<br>
@@ -194,13 +198,32 @@
 					<th>Projection type</th>
 					<th>Theater</th>
 					<th>Price</th>
-					<th>Available seats</th>
 				</tr>		
 			</thead>
 			<tbody id="projectionsTbody">
 			
 			</tbody>
 		</table>
+		</div>
+	</div>
+	<div id="projectionDetail" class="flex-container">
+		<div class="inner-element">
+			<label style="font-size: 20px" id="projectionTitle"></label>
+		</div>
+		<div class="inner-element">
+			<label id="projectionDateAndTime"></label>
+		</div>
+		<br>
+		<div class="inner-element">
+			<label id="projectionType"></label>
+		</div>
+		<br>
+		<div class="inner-element">
+			<label id="projectionTheater"></label>
+		</div>
+		<br>
+		<div class="inner-element">
+			<label id="projectionTicketPrice"></label>
 		</div>
 	</div>
 	

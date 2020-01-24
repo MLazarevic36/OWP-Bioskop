@@ -86,5 +86,39 @@ public class TheaterDAO {
 		}
 		return null;
 	}
+	
+	public static Theater getByName(String name) throws Exception {
+		Connection con = ConnectionManager.getConnection();
+		
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			String query = "SELECT * FROM theaters WHERE name = ?";
+			
+			ps = con.prepareStatement(query);
+			ps.setString(1, name);
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				int index = 1;
+				Integer id_rs = rs.getInt(index++);
+				String name_rs = rs.getString(index++);
+				Integer pt_rs = rs.getInt(index++);
+				
+				Theater theater = new Theater();
+				theater.setId(id_rs);
+				theater.setName(name_rs);
+				List<ProjectionType> projectionTypes = new ArrayList<>();
+				ProjectionType projectionType = ProjectionTypeDAO.get(pt_rs);
+				projectionTypes.add(projectionType);
+				theater.setProjectionTypes((ArrayList<ProjectionType>) projectionTypes);
+				return theater;
+			}
+		}finally {
+			try {ps.close();} catch (Exception ex1) {ex1.printStackTrace();}
+			try {rs.close();} catch (Exception ex1) {ex1.printStackTrace();}
+		}
+		return null;
+	}
 
 }

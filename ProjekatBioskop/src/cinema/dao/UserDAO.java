@@ -3,15 +3,14 @@ package cinema.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import cinema.entity.User;
 import cinema.entity.User.Role;
 
 public class UserDAO {
 	
-	public static SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
 	public static User get(String username, String password) throws Exception {
 		
@@ -19,20 +18,32 @@ public class UserDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			String query = "SELECT id, role, registrationdate FROM users WHERE username = ? AND password = ?";
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			String query = "SELECT * FROM users WHERE username = ? AND password = ?";
 			ps = con.prepareStatement(query);
-			int index = 1;
-			ps.setString(index++, username);
-			ps.setString(index++, password);
+			ps.setString(1, username);
+			ps.setString(2, password);
 			rs = ps.executeQuery();
 			
 			if (rs.next()) {
-				Integer id = rs.getInt(1);
-				Role role = Role.valueOf(rs.getString(2));
-				String registrationdate = rs.getString(3);
-				Timestamp regdate = (Timestamp) DATETIME_FORMAT.parse(registrationdate);
+				int index = 1;
+				Integer id = rs.getInt(index++);
+				String username_rs = rs.getString(index++);
+				String password_rs = rs.getString(index++);
+				String registrationdate = rs.getString(index++);
+				Role role = Role.valueOf(rs.getString(index++));
 				
-				return new User(id, username, password, regdate, role);
+				Date date = sdf.parse(registrationdate);
+				
+				User user = new User();
+				user.setId(id);
+				user.setUsername(username_rs);
+				user.setPassword(password_rs);
+				user.setRegistrationDate(date);
+				user.setDateOutput(registrationdate);
+				user.setRole(role);
+				
+				return user;
 			}
 		} finally {
 			try {ps.close();} catch (Exception ex1) {ex1.printStackTrace();}
@@ -60,6 +71,47 @@ public class UserDAO {
 		} finally {
 			try {ps.close();} catch (Exception ex1) {ex1.printStackTrace();}
 		}
+		
+	}
+	
+public static User get(String username) throws Exception {
+		
+		Connection con = ConnectionManager.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			String query = "SELECT * FROM users WHERE username = ?";
+			ps = con.prepareStatement(query);
+			ps.setString(1, username);
+			rs = ps.executeQuery();
+			
+			if (rs.next()) {
+				int index = 1;
+				Integer id = rs.getInt(index++);
+				String username_rs = rs.getString(index++);
+				String password_rs = rs.getString(index++);
+				String registrationdate = rs.getString(index++);
+				Role role = Role.valueOf(rs.getString(index++));
+				
+				Date date = sdf.parse(registrationdate);
+				
+				User user = new User();
+				user.setId(id);
+				user.setUsername(username_rs);
+				user.setPassword(password_rs);
+				user.setRegistrationDate(date);
+				user.setDateOutput(registrationdate);
+				user.setRole(role);
+				
+				return user;
+			}
+		} finally {
+			try {ps.close();} catch (Exception ex1) {ex1.printStackTrace();}
+			try {rs.close();} catch (Exception ex1) {ex1.printStackTrace();}
+		}
+		
+		return null;
 		
 	}
 	

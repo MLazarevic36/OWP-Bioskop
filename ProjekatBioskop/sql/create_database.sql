@@ -99,5 +99,6 @@ CREATE TABLE projections (
 );
 
 INSERT INTO projections (movie, projectiontype, theater, dateandtime, ticketprice, admincreator) VALUES (1, 2, 1, '2020-03-01 12:46', 400, 1);
-
+INSERT INTO projections (movie, projectiontype, theater, dateandtime, ticketprice, admincreator) VALUES (2, 3, 3, '2020-03-01 13:46', 500, 1);
+INSERT INTO projections (movie, projectiontype, theater, dateandtime, ticketprice, admincreator) VALUES (3, 1, 2, '2020-03-01 15:46', 600, 1);
 

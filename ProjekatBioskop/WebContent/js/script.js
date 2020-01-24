@@ -15,7 +15,13 @@ var ProjectionsManager = {
 								return '<a id="movieRedirectFromProjection" data-name="' + data + '" href="#">' + data + '</a>';
 								}
 							},
-							{data : 'dateOutput'},
+							{
+								"data" : 'dateOutput',
+								render:function(data, type, row){
+									return '<a id="projectionRedirect" data-id="' + row.id +'" href="#">' + data + '</a>';
+								}
+									
+							},
 							{data : 'projectionType'},
 							{data : 'theater'},
 							{data : 'ticketPrice'}
@@ -55,6 +61,44 @@ var ProjectionsManager = {
 					$dropdown.append($("<option />").val(this.id).text(this.name));
 				})
 			})
+		},
+		
+		addProjection : function() {
+			var movie = $('#newProjectionMovie').val();
+			var projectionType = $('#newProjectionType').val();
+			var theater = $('#newProjectionTheater').val();
+			var date = $('#newProjectionDate').val();
+			var time = $('#newProjectionTime').val();
+			var ticket = $('#newProjectionTicketPrice').val();
+			params = {
+					'action': 'add',
+					'movie': movie,
+					'projectionType': projectionType,
+					'theater': theater,
+					'date': date,
+					'time': time,
+					'ticket': ticket
+			};
+			$.post('ProjectionsServlet', params, function(data) {
+				console.log(data);
+			});
+			
+		},
+		
+		getProjection : function(ID){
+			params = {
+					'action': 'getProjection',
+					'id': ID
+			};
+			$.post('ProjectionsServlet', params, function(data){
+				$('#projectionTitle').append('Title: ' + '<a id="movieRedirectFromProjectionDetail" data-name="' + data.projection.movie + '" href="#">' + data.projection.movie + '</a>');
+				$('#projectionDateAndTime').append('Date and time: ' + data.projection.dateOutput);
+				$('#projectionType').append('Type: ' + data.projection.projectionType);
+				$('#projectionTheater').append('Theater: ' + data.projection.theater);
+				$('#projectionTicketPrice').append('Ticket price: ' + data.projection.ticketPrice);
+				
+			} );
+			
 		}
 }
 
@@ -86,7 +130,8 @@ var MoviesManager = {
 							{
 								return '<button id="deleteMovie" data-id="' + data.id + '">Delete</button>'
 							},
-							"targets": -1
+							"targets": -1,
+							"visible": false
 						}
 					]
 				})
@@ -128,6 +173,50 @@ var MoviesManager = {
 								{
 									return '<button id="deleteMovie" data-id="' + data.id + '">Delete</button>'
 								},
+								"targets": -1,
+								"visible": false
+							}
+						]
+					})
+					
+				}
+			});
+		},
+		
+		searchMoviesAdmin : function() {
+			var $searchOptionBox = $('#searchOptionsBox').find('option:selected');
+			var searchMovieInput = $('#searchMovieInput').val();
+			var params = {
+					'searchOptionsBox': $searchOptionBox.val(),
+					'searchMovieInput': searchMovieInput
+			};
+			$('#moviesTable1').dataTable().fnClearTable();
+			$.get('SearchMoviesServlet', params, function(data) {
+				for(m in data.filteredMovies) {
+					$('#moviesTable1').dataTable().fnDestroy();
+					$('#moviesTable1').DataTable({
+						data: data.filteredMovies,
+						paging: false,
+						info: false,
+						searching: false,
+						autoWidth: true,
+						columns: [
+							{
+								"data" : 'title',
+								render:function(data, type, row){
+									return '<a id="movieRedirect" href="" data-id="' + row.id + '">' + data + '</a>';
+								}
+							},
+							{data : 'duration'},
+							{data : 'distributor'},
+							{data : 'originCountry'},
+							{data : 'yearOfProduction'},
+							{
+								"data": null,
+								render:function(data, type, row)
+								{
+									return '<button id="deleteMovie" data-id="' + data.id + '">Delete</button>'
+								},
 								"targets": -1
 							}
 						]
@@ -136,6 +225,7 @@ var MoviesManager = {
 				}
 			});
 		},
+		
 		
 		addMovie : function() {
 			var title = $('#newMovieTitle').val();
@@ -196,6 +286,8 @@ var MoviesManager = {
 				'title': title
 			};
 			$.post('MoviesServlet', params, function(data){
+				window.location.href = "#";
+		        window.location.href += '?id=' + data.movie.id;
 				$("#updatedMovieTitle").val(data.movie.title);
 				$("#updatedMovieDuration").val(data.movie.duration);
 				$("#updatedMovieDistributor").val(data.movie.distributor);
@@ -240,9 +332,69 @@ var MoviesManager = {
 		}
 }
 
+var UsersManager = {
+		logIn : function() {
+			var username = $('#LoginUsername').val();
+			var password = $('#LoginPassword').val();
+			
+			params = {
+					'username': username,
+					'password': password
+			};
+			
+			$.post('LoginServlet', params, function(data){
+				if( data.user.role === "ADMIN") {
+					StateManager.initState();
+				}
+				if( data.user.role === "USER") {
+					StateManager.loggedInState();
+				}
+			})
+		},
+		
+		logOut : function() {
+			$.get('LogoutServlet', function(data) {
+				console.log(data);
+			})
+		}
+}
+
 var StateManager = {
 		
 		initState : function(){
+			params = {
+					'action':'loggedInUserRole'
+			};
+			$.get('UserServlet', params, function(data){
+				if(data.loggedInUserRole === "ADMIN") {
+					$('#ProfileBtn').show();
+					$('#UsersBtn').show();
+					$('#LoginBtn').hide();
+					$('#RegisterBtn').hide();
+					$('#LogoutBtn').show();
+					$('#LoginForm').hide();
+					$('#RegisterForm').hide();
+					$('#moviesSection').hide();
+					$('#movieDetail').hide();
+					$('#movieCommands').hide();
+					$('#addProjectionForm').hide();
+					$('#addNewProjection').show();
+				}
+				if(data.loggedInUserRole === "USER") {
+					$('#ProfileBtn').show();
+					$('#UsersBtn').hide();
+					$('#LoginBtn').hide();
+					$('#RegisterBtn').hide();
+					$('#LogoutBtn').show();
+					$('#LoginForm').hide();
+					$('#RegisterForm').hide();
+					$('#moviesSection').hide();
+					$('#movieDetail').hide();
+					$('#movieCommands').hide();
+					$('#addProjectionForm').hide();
+					$('#addNewProjection').hide();
+				}
+			})
 			$('#ProfileBtn').hide();
 			$('#UsersBtn').hide();
 			$('#LogoutBtn').hide();
@@ -252,6 +404,7 @@ var StateManager = {
 			$('#movieDetail').hide();
 			$('#movieCommands').hide();
 			$('#addProjectionForm').hide();
+			$('#addNewProjection').hide();
 		},
 		
 		loggingState: function(){
@@ -280,6 +433,44 @@ var StateManager = {
 		},
 		
 		moviesState: function() {
+			params = {
+					'action':'loggedInUserRole'
+			};
+			$.get('UserServlet', params, function(data){
+				if(data.loggedInUserRole === "ADMIN") {
+					$('#ProfileBtn').hide();
+					$('#UsersBtn').hide();
+					$('#LogoutBtn').hide();
+					$('#LoginForm').hide();
+					$('#RegisterForm').hide();
+					$('#moviesSection').show();
+					$('#addMovieForm').hide();
+					$('#movieDetail').hide();
+					$('#movieCommands').hide();
+					$('#projectionsSection').hide();
+					$('#addNewMovie').show();
+					$('#ProfileBtn').show();
+					$('#UsersBtn').show();
+					$('#LogoutBtn').show();
+					$('#moviesTable1').dataTable().fnSetColumnVis(5, true);
+					
+				}
+				if(data.loggedInUserRole === "USER") {
+					$('#ProfileBtn').hide();
+					$('#UsersBtn').hide();
+					$('#LogoutBtn').hide();
+					$('#LoginForm').hide();
+					$('#RegisterForm').hide();
+					$('#moviesSection').show();
+					$('#addMovieForm').hide();
+					$('#movieDetail').hide();
+					$('#movieCommands').hide();
+					$('#projectionsSection').hide();
+					$('#addNewMovie').hide();
+					$('#ProfileBtn').show();
+					$('#LogoutBtn').show();
+				}
+			})
 			$('#ProfileBtn').hide();
 			$('#UsersBtn').hide();
 			$('#LogoutBtn').hide();
@@ -290,6 +481,7 @@ var StateManager = {
 			$('#movieDetail').hide();
 			$('#movieCommands').hide();
 			$('#projectionsSection').hide();
+			$('#addNewMovie').hide();
 			
 		}
 		
@@ -311,8 +503,34 @@ $(document).ready(function() {
 	
 	$('#searchMovieBtn').click(function(e) {
 		e.preventDefault();
+		params = {
+				'action':'loggedInUserRole'
+		};
+		$.get('UserServlet', params, function(data){
+			if(data.loggedInUserRole === "ADMIN") {
+				MoviesManager.searchMoviesAdmin();
+			}
+			if(data.loggedInUserRole === "USER"){
+				MoviesManager.searchMovies();
+			}
+			
+		});
 		MoviesManager.searchMovies();
 	});
+	
+	$('#btnConfirmLogin').click(function(e) {
+		e.preventDefault();
+		UsersManager.logIn();
+		location.reload();
+	});
+	
+	$('#LogoutBtn').click(function(e) {
+		e.preventDefault();
+		UsersManager.logOut();
+		location.reload();
+	});
+	
+	
 	
 	$('#addNewMovie').click(function(e) {
 		$('#addMovieForm').toggle();
@@ -324,7 +542,12 @@ $(document).ready(function() {
 		$('#addMovieForm').toggle();
 		$('#moviesTable1').dataTable().fnDestroy();
         MoviesManager.getAll();
-		
+	});
+	
+	$('#submitNewProjection').click(function(e){
+		ProjectionsManager.addProjection();
+		$('#projectionsTable1').dataTable().fnDestroy();
+		ProjectionsManager.getAll();
 	})
 	
 	$('#btnConfirmLogin').click(function(e) {
@@ -341,6 +564,7 @@ $(document).ready(function() {
 	$('#MoviesBtn').click(function (e) {
 		e.preventDefault();
 		StateManager.moviesState();
+		
 	});
 	
 	$('#RegisterBtn').click(function(e) {
@@ -362,6 +586,7 @@ $(document).ready(function() {
         MoviesManager.getAll();
         
         
+        
     });
     
     $('body').on('click', '#movieRedirect', function(e){
@@ -380,7 +605,25 @@ $(document).ready(function() {
 		$('#moviesSection').hide();
     });
     
+    
+    
     $('body').on('click', '#movieRedirectFromProjection', function(e){
+        var name= $(this).attr("data-name");
+        $('#movieTitle').text('');
+		$('#movieDuration').text('');
+		$('#movieDistributor').text('');
+		$('#movieOriginCountry').text('');
+		$('#movieYearOfProduction').text('');
+		MoviesManager.getMovieByTitle(name);
+        $('#movieDetail').show();
+		$('#movieCommands').show();
+		$('#updateMovieForm').hide();
+		$('#projectionsSection').hide();
+		console.log(name);
+      
+    });
+    
+    $('body').on('click', '#movieRedirectFromProjectionDetail', function(e){
         var name= $(this).attr("data-name");
         $('#movieTitle').text('');
 		$('#movieDuration').text('');
@@ -393,8 +636,17 @@ $(document).ready(function() {
 		$('#updateMovieForm').hide();
 		$('#moviesSection').hide();
 		$('#projectionsSection').hide();
+		$('#projectionDetail').hide();
 		console.log(name);
       
+    });
+    
+    $('body').on('click', '#projectionRedirect', function(e){
+        var id= $(this).attr("data-id");
+        e.target.href = "#";
+        e.target.href += '?id=' + id;
+        ProjectionsManager.getProjection(id);
+        $('#projectionsSection').hide();
         
     });
     
@@ -411,6 +663,7 @@ $(document).ready(function() {
         $('#movieDetail').hide();
 		$('#movieCommands').hide();
 		$('#moviesSection').show();
+		$('#addMovieForm').hide();
     });
     
     $('#updateMovie').click(function(e) {
