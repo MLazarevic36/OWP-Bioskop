@@ -57,8 +57,6 @@ public static List<Projection> getAll() {
 				projection.setAdminCreator(admin_creator);
 				
 				projections.add(projection);
-				System.out.println(date_and_time);
-				System.out.println(date);
 				
 			}
 			

@@ -38,8 +38,10 @@ public class LoginServlet extends HttpServlet {
 			}
 			
 			HttpSession httpSession = request.getSession();
+			if(user.getUsername() == null) {
+				request.getRequestDispatcher("./FailureServlet").forward(request, response);
+			}
 			httpSession.setAttribute("loggedInUsername", user.getUsername());
-		
 			request.getRequestDispatcher("./SuccessServlet").forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();

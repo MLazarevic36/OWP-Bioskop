@@ -13,6 +13,8 @@ a {
      color: white;
 }
 
+
+
 #newProjectionTime::-webkit-datetime-edit-ampm-field {
    display: none;
  }

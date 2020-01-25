@@ -38,7 +38,6 @@ public class ProjectionsServlet extends HttpServlet {
 		response.setContentType("application/json");
 		response.getWriter().write(jsonData);
 		
-		System.out.println(jsonData);
 	}
 
 
@@ -46,35 +45,34 @@ public class ProjectionsServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String action = request.getParameter("action");
-		Integer id = Integer.parseInt(request.getParameter("id"));
-//		Integer movie = Integer.parseInt(request.getParameter("movie"));
-//		Integer projectionType = Integer.parseInt(request.getParameter("projectionType"));
-//		Integer theater = Integer.parseInt(request.getParameter("theater"));
-//		String date = request.getParameter("date");
-//		Double ticket = Double.parseDouble(request.getParameter("ticket"));
-//		String time = request.getParameter("time");
 		
 		try {
 			switch(action) {
 				case "add": {
-//					Projection projection = new Projection();
-//					Movie movieObject = MovieDAO.get(movie);
-//					projection.setMovie(movieObject.getTitle());
-//					ProjectionType projectionTypeObject = ProjectionTypeDAO.get(projectionType);
-//					projection.setProjectionType(projectionTypeObject.getName());
-//					Theater theaterObject = TheaterDAO.get(theater);
-//					projection.setTheater(theaterObject.getName());
-//					String full_date = date + ' ' + time;
-//					projection.setDateOutput(full_date);
-//					projection.setTicketPrice(ticket);
-//					projection.setAdminCreator(1);
-//					
-//					ProjectionDAO.addProjection(projection);
+					Integer movie = Integer.parseInt(request.getParameter("movie"));
+					Integer projectionType = Integer.parseInt(request.getParameter("projectionType"));
+					Integer theater = Integer.parseInt(request.getParameter("theater"));
+					String date = request.getParameter("date");
+					Double ticket = Double.parseDouble(request.getParameter("ticket"));
+					String time = request.getParameter("time");
+					Projection projection = new Projection();
+					Movie movieObject = MovieDAO.get(movie);
+					projection.setMovie(movieObject.getTitle());
+					ProjectionType projectionTypeObject = ProjectionTypeDAO.get(projectionType);
+					projection.setProjectionType(projectionTypeObject.getName());
+					Theater theaterObject = TheaterDAO.get(theater);
+					projection.setTheater(theaterObject.getName());
+					String full_date = date + ' ' + time;
+					projection.setDateOutput(full_date);
+					projection.setTicketPrice(ticket);
+					projection.setAdminCreator(1);
+					
+					ProjectionDAO.addProjection(projection);
 					
 					break;
 				}
 				case "getProjection": {
-					
+					Integer id = Integer.parseInt(request.getParameter("id"));
 					Projection projection = ProjectionDAO.get(id);
 					Map<String, Object> projectionObject = new HashMap<>();
 					projectionObject.put("projection", projection);
