@@ -62,6 +62,18 @@ a {
 	background-color: white;
 }
 
+#usersTable {
+	width: 100%;
+	text-align: center;
+	background-color: white;
+}
+
+#buyTicketFromMovieTable {
+	width: 100%;
+	text-align: center;
+	background-color: white;
+}
+
 #moviesSearchBox {
 	width:100%;
 	overflow:hidden;

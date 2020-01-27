@@ -74,13 +74,27 @@ public class ProjectionsServlet extends HttpServlet {
 				case "getProjection": {
 					Integer id = Integer.parseInt(request.getParameter("id"));
 					Projection projection = ProjectionDAO.get(id);
-					Map<String, Object> projectionObject = new HashMap<>();
-					projectionObject.put("projection", projection);
+					Map<String, Object> data = new HashMap<>();
+					data.put("projection", projection);
 					ObjectMapper mapper = new ObjectMapper();
-					String jsonDataMovie = mapper.writeValueAsString(projectionObject);
+					String jsonDataProjection = mapper.writeValueAsString(data);
 					
 					response.setContentType("application/json");
-					response.getWriter().write(jsonDataMovie);
+					response.getWriter().write(jsonDataProjection);
+				}
+				case "getProjectionsByMovie": {
+					String movie_id = request.getParameter("id");
+					Integer id = Integer.parseInt(movie_id);
+					List<Projection> projections = ProjectionDAO.getAllByMovie(id);
+					
+					Map<String, Object> data = new HashMap<>();
+					data.put("projections", projections);
+					
+					ObjectMapper mapper = new ObjectMapper();
+					String jsonData = mapper.writeValueAsString(data);
+					
+					response.setContentType("application/json");
+					response.getWriter().write(jsonData);
 				}
 			}
 		}catch (Exception ex) {

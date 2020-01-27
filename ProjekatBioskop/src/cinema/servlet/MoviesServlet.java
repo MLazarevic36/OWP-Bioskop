@@ -41,17 +41,15 @@ public class MoviesServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String action = request.getParameter("action");
-		String id = request.getParameter("id");
-		String title = request.getParameter("title");
-		String duration = request.getParameter("duration");
-		String distributor = request.getParameter("distributor");
-		String originCountry = request.getParameter("originCountry");
-		String yearOfProduction = request.getParameter("yearOfProduction");
 		
 		try {
 			switch(action) {
 			case "add": {
-				
+				String title = request.getParameter("title");
+				String duration = request.getParameter("duration");
+				String distributor = request.getParameter("distributor");
+				String originCountry = request.getParameter("originCountry");
+				String yearOfProduction = request.getParameter("yearOfProduction");
 				Movie movie = new Movie();
 				movie.setTitle(title);
 				movie.setDuration(duration);
@@ -62,11 +60,13 @@ public class MoviesServlet extends HttpServlet {
 				break;
 			}
 			case "delete": {
+				String id = request.getParameter("id");
 				Integer delete_id = Integer.parseInt(id);
 				MovieDAO.delete(delete_id);
 				break;
 			}
 			case "getMovie": {
+				String id = request.getParameter("id");
 				Integer get_movie_id = Integer.parseInt(id);
 				Movie movie = MovieDAO.get(get_movie_id);
 				Map<String, Object> movieObject = new HashMap<>();
@@ -78,6 +78,12 @@ public class MoviesServlet extends HttpServlet {
 				response.getWriter().write(jsonDataMovie);
 			}
 			case "update": {
+				String id = request.getParameter("id");
+				String title = request.getParameter("title");
+				String duration = request.getParameter("duration");
+				String distributor = request.getParameter("distributor");
+				String originCountry = request.getParameter("originCountry");
+				String yearOfProduction = request.getParameter("yearOfProduction");
 				Integer update_id = Integer.parseInt(id);
 				Integer update_year = Integer.parseInt(yearOfProduction);
 				Movie movie = new Movie();
@@ -97,6 +103,7 @@ public class MoviesServlet extends HttpServlet {
 				break;
 			}
 			case "getMovieByTitle": {
+				String title = request.getParameter("title");
 				Movie movie = MovieDAO.getByTitle(title);
 				Map<String, Object> movieObject = new HashMap<>();
 				movieObject.put("movie", movie);

@@ -5,16 +5,16 @@ import java.util.Date;
 public class Ticket {
 
 	private Integer id;
-	private Projection projection;
-	private Seat seat;
+	private Integer projection;
+	private Integer seat;
 	private Date dateAndTimeOfPurchase;
-	private User buyer;
+	private Integer buyer;
 	
 	public Ticket() {
 		
 	}
 
-	public Ticket(Integer id, Projection projection, Seat seat, Date dateAndTimeOfPurchase, User buyer) {
+	public Ticket(Integer id, Integer projection, Integer seat, Date dateAndTimeOfPurchase, Integer buyer) {
 		
 		this.id = id;
 		this.projection = projection;
@@ -31,19 +31,19 @@ public class Ticket {
 		this.id = id;
 	}
 
-	public Projection getProjection() {
+	public Integer getProjection() {
 		return projection;
 	}
 
-	public void setProjection(Projection projection) {
+	public void setProjection(Integer projection) {
 		this.projection = projection;
 	}
 
-	public Seat getSeat() {
+	public Integer getSeat() {
 		return seat;
 	}
 
-	public void setSeat(Seat seat) {
+	public void setSeat(Integer seat) {
 		this.seat = seat;
 	}
 
@@ -55,11 +55,11 @@ public class Ticket {
 		this.dateAndTimeOfPurchase = dateAndTimeOfPurchase;
 	}
 
-	public User getBuyer() {
+	public Integer getBuyer() {
 		return buyer;
 	}
 
-	public void setBuyer(User buyer) {
+	public void setBuyer(Integer buyer) {
 		this.buyer = buyer;
 	}
 	

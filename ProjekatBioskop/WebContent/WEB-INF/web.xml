@@ -117,4 +117,34 @@
     <servlet-name>UserServlet</servlet-name>
     <url-pattern>/UserServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ProjectionsServletByMovie</display-name>
+    <servlet-name>ProjectionsServletByMovie</servlet-name>
+    <servlet-class>cinema.servlet.ProjectionsServletByMovie</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ProjectionsServletByMovie</servlet-name>
+    <url-pattern>/ProjectionsServletByMovie</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>UsersServlet</display-name>
+    <servlet-name>UsersServlet</servlet-name>
+    <servlet-class>cinema.servlet.UsersServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UsersServlet</servlet-name>
+    <url-pattern>/UsersServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ProjectionServlet</display-name>
+    <servlet-name>ProjectionServlet</servlet-name>
+    <servlet-class>cinema.servlet.ProjectionServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ProjectionServlet</servlet-name>
+    <url-pattern>/ProjectionServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

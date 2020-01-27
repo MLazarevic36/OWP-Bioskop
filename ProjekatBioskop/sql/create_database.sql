@@ -102,3 +102,17 @@ INSERT INTO projections (movie, projectiontype, theater, dateandtime, ticketpric
 INSERT INTO projections (movie, projectiontype, theater, dateandtime, ticketprice, admincreator) VALUES (2, 3, 3, '2020-03-01 13:46', 500, 1);
 INSERT INTO projections (movie, projectiontype, theater, dateandtime, ticketprice, admincreator) VALUES (3, 1, 2, '2020-03-01 15:46', 600, 1);
 
+
+CREATE TABLE tickets (
+
+	id INTEGER PRIMARY KEY,
+	projection INT NOT NULL,
+	seat INT NOT NULL,
+	dateandtime DATETIME NOT NULL,
+	price DECIMAL(10, 2) NOT NULL DEFAULT 999.00,
+	buyer INT NOT NULL,
+	FOREIGN KEY (projection) references projections(id) ON DELETE RESTRICT,
+	FOREIGN KEY (seat) references seats(id) ON DELETE RESTRICT,
+	FOREIGN KEY (buyer) references users(id) ON DELETE RESTRICT
+	
+);
