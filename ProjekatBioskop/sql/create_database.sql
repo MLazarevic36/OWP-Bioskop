@@ -69,17 +69,29 @@ INSERT INTO theaters (name, projectiontype) VALUES ('C', 3);
 
 CREATE TABLE seats (
 
+	id INTEGER PRIMARY KEY,
 	number INTEGER UNIQUE,
 	theater INT NOT NULL,
+	available INT NOT NULL,
 	FOREIGN KEY (theater) references theaters(id) ON DELETE RESTRICT
 
 );
 
-INSERT INTO seats (number, theater) VALUES (1, 1);
-INSERT INTO seats (number, theater) VALUES (2, 1);
-INSERT INTO seats (number, theater) VALUES (3, 1);
-INSERT INTO seats (number, theater) VALUES (4, 1);
-INSERT INTO seats (number, theater) VALUES (5, 1);
+INSERT INTO seats (number, theater, available) VALUES (1, 1, 1);
+INSERT INTO seats (number, theater, available) VALUES (2, 1, 1);
+INSERT INTO seats (number, theater, available) VALUES (3, 1, 1);
+INSERT INTO seats (number, theater, available) VALUES (4, 1, 1);
+INSERT INTO seats (number, theater, available) VALUES (5, 1, 1);
+INSERT INTO seats (number, theater, available) VALUES (6, 2, 1);
+INSERT INTO seats (number, theater, available) VALUES (7, 2, 1);
+INSERT INTO seats (number, theater, available) VALUES (8, 2, 1);
+INSERT INTO seats (number, theater, available) VALUES (9, 2, 1);
+INSERT INTO seats (number, theater, available) VALUES (10, 2, 1);
+INSERT INTO seats (number, theater, available) VALUES (11, 3, 1);
+INSERT INTO seats (number, theater, available) VALUES (12, 3, 1);
+INSERT INTO seats (number, theater, available) VALUES (13, 3, 1);
+INSERT INTO seats (number, theater, available) VALUES (14, 3, 1);
+INSERT INTO seats (number, theater, available) VALUES (15, 3, 1);
 
 CREATE TABLE projections (
 

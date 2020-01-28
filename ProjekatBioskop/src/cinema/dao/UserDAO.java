@@ -164,5 +164,46 @@ public static User get(String username) throws Exception {
 	return users;
 }
 	
+public static User get(Integer id) throws Exception {
+		
+		Connection con = ConnectionManager.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			String query = "SELECT * FROM users WHERE id = ?";
+			ps = con.prepareStatement(query);
+			ps.setInt(1, id);
+			rs = ps.executeQuery();
+			
+			if (rs.next()) {
+				int index = 1;
+				Integer id_rs = rs.getInt(index++);
+				String username_rs = rs.getString(index++);
+				String password_rs = rs.getString(index++);
+				String registrationdate = rs.getString(index++);
+				Role role = Role.valueOf(rs.getString(index++));
+				
+				Date date = sdf.parse(registrationdate);
+				
+				User user = new User();
+				user.setId(id_rs);
+				user.setUsername(username_rs);
+				user.setPassword(password_rs);
+				user.setRegistrationDate(date);
+				user.setDateOutput(registrationdate);
+				user.setRole(role);
+				
+				return user;
+			}
+		} finally {
+			try {ps.close();} catch (Exception ex1) {ex1.printStackTrace();}
+			try {rs.close();} catch (Exception ex1) {ex1.printStackTrace();}
+		}
+		
+		return null;
+		
+	}
+	
 	
 }

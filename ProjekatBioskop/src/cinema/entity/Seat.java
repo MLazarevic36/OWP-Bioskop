@@ -2,8 +2,10 @@ package cinema.entity;
 
 public class Seat {
 	
+	private Integer id;
 	private Integer number;
-	private Theater theater;
+	private int theater;
+	private int available;
 	
 		
 	public Seat() {
@@ -11,12 +13,23 @@ public class Seat {
 	}
 
 
-	public Seat(Integer number, Theater theater) {
+	public Seat(Integer id, Integer number, int theater, int available) {
 		
+		this.id = id;
 		this.number = number;
 		this.theater = theater;
+		this.available = available;
 	}
 
+	
+	public Integer getId() {
+		return id;
+	}
+
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public Integer getNumber() {
 		return number;
@@ -28,16 +41,22 @@ public class Seat {
 	}
 
 
-	public Theater getTheater() {
+	public int getTheater() {
 		return theater;
 	}
 
 
-	public void setTheater(Theater theater) {
+	public void setTheater(int theater) {
 		this.theater = theater;
 	}
 	
+	public int getAvailable() {
+		return available;
+	}
 	
+	public void setAvailable(int available) {
+		this.available = available;
+	}
 	
 	
 	
