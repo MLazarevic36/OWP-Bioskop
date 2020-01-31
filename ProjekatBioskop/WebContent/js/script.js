@@ -63,16 +63,31 @@ var ProjectionsManager = {
 			})
 		},
 		
-		populateSeatRadio: function(ID) {
+		updateSeatProjection: function(ID, projection_id) {
 			params = {
-					'theater_name': ID
+					'action': 'updateSeatProjection',
+					'id': ID,
+					'projection_id': projection_id
 			};
+			$.post('SeatServlet', params, function(data){
+				console.log(params);
+				console.log(data);
+			})
+		},
+		
+		populateSeatRadio: function(projection_id) {
+			params = {
+					'projection_id': projection_id
+					
+			};
+			
+			var proj_id = projection_id;
 			
 			$.get('SeatServlet', params, function(data) {
 				for(i = 0; i < data.seats.length; i++){
 					var newData = data.seats[i];
-					if(newData.available === 1){
-					var radioBtn = $('<label for="seat"><input type="radio" name="seat" value="'+ newData.id +'" />'+ newData.number +'</label>');
+					if(newData.taken === 0 && newData.projection_id === proj_id){
+					var radioBtn = $('<label for="seat"><input type="radio" name="seat" value="'+ newData.seat_id +'" />'+ newData.seat_id  +'</label>');
 					radioBtn.appendTo('#radioSeats');
 					}
 				}
@@ -124,15 +139,7 @@ var ProjectionsManager = {
 
 var SeatManager = {
 		
-		takeSeat : function(ID) {
-			params = {
-					'action': 'takeSeat',
-					'id': ID
-			};
-			$.post('SeatServlet', params, function(data){
-				console.log(data);
-			})
-		}
+		
 }
 
 
@@ -146,15 +153,14 @@ var TicketManager = {
 				window.location.href = "#";
 		        window.location.href += '?id=' + data.projection.id;
 				$('#radioSeats').empty();
-				var theaterName = data.projection.theater;
-				ProjectionsManager.populateSeatRadio(theaterName);
+				ProjectionsManager.populateSeatRadio(data.projection.id);
 				$('#ticketProjectionTitle').text('');
 				$('#ticketProjectionDateAndTime').text('');
 				$('#ticketProjectionType').text('');
 				$('#ticketProjectionTheater').text('');
 				$('#ticketProjectionTicketPrice').text('');
 				$('#ticketProjectionTitle').append('Title: ' + '<a id="movieRedirectFromTicketDetail" data-name="' + data.projection.movie + '" href="#">' + data.projection.movie + '</a>');
-				$('#ticketProjectionDateAndTime').append('Date and time: ' + data.projection.dateOutput);
+				$('#ticketProjectionDateAndTime').append('Date and time: '+ '<a id="projectionRedirectFromTicketDetail" data-id="' + data.projection.id + '" href="#">' + data.projection.dateOutput + '</a>');
 				$('#ticketProjectionType').append('Type: ' + data.projection.projectionType);
 				$('#ticketProjectionTheater').append('Theater: ' + data.projection.theater);
 				$('#ticketProjectionTicketPrice').append('Ticket price: ' + data.projection.ticketPrice);
@@ -180,7 +186,6 @@ var TicketManager = {
 				}
 				$.post('TicketServlet', params_ticket, function(data) {
 					alert('You have successfully bought ticket!')
-					SeatManager.takeSeat(seat);
 					TicketManager.populateTicketDetails(projection_id);
 				})
 				
@@ -906,10 +911,22 @@ $(document).ready(function() {
         var name= $(this).attr("data-name");
 		MoviesManager.getMovieByTitle(name);
 		StateManager.detailedMovieState();
-		$('#projectionsSection').hide();
-		$('#projectionDetail').hide();
+		$('#ticketDetail').hide();
+		$('#buyTicketFromMovieSection').hide();
       
     });
+    
+    $('body').on('click', '#movieRedirectFromTicketDetail', function(e){
+        var name= $(this).attr("data-name");
+		MoviesManager.getMovieByTitle(name);
+		StateManager.detailedMovieState();
+		$('#projectionsSection').hide();
+		$('#projectionDetail').hide();
+		$('#ticketDetail').hide();
+      
+    });
+    
+    
     
     
     $('body').on('click', '#movieRedirectFromBuyTicket', function(e){
@@ -953,6 +970,19 @@ $(document).ready(function() {
 		$('#movieCommands').hide();
         
               
+    });
+    
+    
+    
+    $('body').on('click', '#projectionRedirectFromTicketDetail', function(e){
+        var id= $(this).attr("data-id");
+        e.target.href = "#";
+        e.target.href += '?id=' + id;
+        ProjectionsManager.getProjection(id);
+        StateManager.detailedProjectionState();
+        $('#ticketDetail').hide();
+        $('#buyTicket').show();
+                      
     });
     
     $('#updateMovieFromDetail').click(function(e) {

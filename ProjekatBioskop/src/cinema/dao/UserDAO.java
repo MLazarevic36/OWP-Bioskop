@@ -120,51 +120,51 @@ public static User get(String username) throws Exception {
 
 	public static List<User> getAll() {
 	
-	List<User> users = new ArrayList<>();
-	
-	Connection con = ConnectionManager.getConnection();
-	
-	PreparedStatement ps = null;
-	ResultSet rs = null;
-	
-	try {
-		String query = "SELECT * FROM users";
+		List<User> users = new ArrayList<>();
 		
-		ps = con.prepareStatement(query);
+		Connection con = ConnectionManager.getConnection();
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		
-		rs = ps.executeQuery();
-		while (rs.next()) {
-			int index = 1;
-			int id = rs.getInt(index++);
-			String username = rs.getString(index++);
-			String password = rs.getString(index++);
-			String registrationdate = rs.getString(index++);
-			String role = rs.getString(index++);
-			Date date = sdf.parse(registrationdate);
-			User user = new User();
-			user.setId(id);
-			user.setUsername(username);
-			user.setPassword(password);
-			user.setRegistrationDate(date);
-			user.setRole(Role.valueOf(role));
-			user.setDateOutput(registrationdate);
+		try {
+			String query = "SELECT * FROM users";
 			
-			users.add(user);
+			ps = con.prepareStatement(query);
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				int index = 1;
+				int id = rs.getInt(index++);
+				String username = rs.getString(index++);
+				String password = rs.getString(index++);
+				String registrationdate = rs.getString(index++);
+				String role = rs.getString(index++);
+				Date date = sdf.parse(registrationdate);
+				User user = new User();
+				user.setId(id);
+				user.setUsername(username);
+				user.setPassword(password);
+				user.setRegistrationDate(date);
+				user.setRole(Role.valueOf(role));
+				user.setDateOutput(registrationdate);
+				
+				users.add(user);
+			}
+			
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			try {ps.close();} catch (Exception ex1) {ex1.printStackTrace();}
+			try {rs.close();} catch (Exception ex1) {ex1.printStackTrace();}
 		}
 		
-	} catch(Exception ex) {
-		ex.printStackTrace();
-	} finally {
-		try {ps.close();} catch (Exception ex1) {ex1.printStackTrace();}
-		try {rs.close();} catch (Exception ex1) {ex1.printStackTrace();}
+		return users;
 	}
 	
-	return users;
-}
-	
-public static User get(Integer id) throws Exception {
+	public static User get(Integer id) throws Exception {
 		
 		Connection con = ConnectionManager.getConnection();
 		PreparedStatement ps = null;

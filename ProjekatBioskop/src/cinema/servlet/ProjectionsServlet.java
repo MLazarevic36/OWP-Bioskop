@@ -15,10 +15,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import cinema.entity.Movie;
 import cinema.entity.Projection;
 import cinema.entity.ProjectionType;
+import cinema.entity.Seat;
 import cinema.entity.Theater;
 import cinema.dao.MovieDAO;
 import cinema.dao.ProjectionDAO;
 import cinema.dao.ProjectionTypeDAO;
+import cinema.dao.SeatDAO;
 import cinema.dao.TheaterDAO;
 
 public class ProjectionsServlet extends HttpServlet {
@@ -68,6 +70,14 @@ public class ProjectionsServlet extends HttpServlet {
 					projection.setAdminCreator(1);
 					
 					ProjectionDAO.addProjection(projection);
+					
+					Projection lastProjection = ProjectionDAO.getLast();
+					
+					List<Seat> seats = SeatDAO.getAll(theaterObject.getName());
+			
+					for(Seat i : seats){
+						SeatDAO.addSeatAvailable(lastProjection.getId(), i.getNumber());
+					}
 					
 					break;
 				}

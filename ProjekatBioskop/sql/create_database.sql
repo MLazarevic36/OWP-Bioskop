@@ -20,6 +20,7 @@ CREATE TABLE users (
 
 INSERT INTO users (username, password, registrationdate, role) VALUES ('a', 'a', '2017-11-21 19:23', 'ADMIN');
 INSERT INTO users (username, password, registrationdate, role) VALUES ('b', 'b', '2018-02-09 12:46', 'USER');
+INSERT INTO users (username, password, registrationdate, role) VALUES ('c', 'c', '2019-02-02 12:46', 'USER');
 
 CREATE TABLE movies (
 
@@ -72,26 +73,25 @@ CREATE TABLE seats (
 	id INTEGER PRIMARY KEY,
 	number INTEGER UNIQUE,
 	theater INT NOT NULL,
-	available INT NOT NULL,
 	FOREIGN KEY (theater) references theaters(id) ON DELETE RESTRICT
 
 );
 
-INSERT INTO seats (number, theater, available) VALUES (1, 1, 1);
-INSERT INTO seats (number, theater, available) VALUES (2, 1, 1);
-INSERT INTO seats (number, theater, available) VALUES (3, 1, 1);
-INSERT INTO seats (number, theater, available) VALUES (4, 1, 1);
-INSERT INTO seats (number, theater, available) VALUES (5, 1, 1);
-INSERT INTO seats (number, theater, available) VALUES (6, 2, 1);
-INSERT INTO seats (number, theater, available) VALUES (7, 2, 1);
-INSERT INTO seats (number, theater, available) VALUES (8, 2, 1);
-INSERT INTO seats (number, theater, available) VALUES (9, 2, 1);
-INSERT INTO seats (number, theater, available) VALUES (10, 2, 1);
-INSERT INTO seats (number, theater, available) VALUES (11, 3, 1);
-INSERT INTO seats (number, theater, available) VALUES (12, 3, 1);
-INSERT INTO seats (number, theater, available) VALUES (13, 3, 1);
-INSERT INTO seats (number, theater, available) VALUES (14, 3, 1);
-INSERT INTO seats (number, theater, available) VALUES (15, 3, 1);
+INSERT INTO seats (number, theater) VALUES (1, 1);
+INSERT INTO seats (number, theater) VALUES (2, 1);
+INSERT INTO seats (number, theater) VALUES (3, 1);
+INSERT INTO seats (number, theater) VALUES (4, 1);
+INSERT INTO seats (number, theater) VALUES (5, 1);
+INSERT INTO seats (number, theater) VALUES (6, 2);
+INSERT INTO seats (number, theater) VALUES (7, 2);
+INSERT INTO seats (number, theater) VALUES (8, 2);
+INSERT INTO seats (number, theater) VALUES (9, 2);
+INSERT INTO seats (number, theater) VALUES (10, 2);
+INSERT INTO seats (number, theater) VALUES (11, 3);
+INSERT INTO seats (number, theater) VALUES (12, 3);
+INSERT INTO seats (number, theater) VALUES (13, 3);
+INSERT INTO seats (number, theater) VALUES (14, 3);
+INSERT INTO seats (number, theater) VALUES (15, 3);
 
 CREATE TABLE projections (
 
@@ -128,3 +128,28 @@ CREATE TABLE tickets (
 	FOREIGN KEY (buyer) references users(id) ON DELETE RESTRICT
 	
 );
+
+CREATE TABLE seat_availability (
+
+	projection_id INT NOT NULL,
+	seat_id INT NOT NULL,
+	taken INT NOT NULL,
+	FOREIGN KEY (projection_id) references projections(id) ON DELETE RESTRICT,
+	FOREIGN KEY (seat_id) references seats(id) ON DELETE RESTRICT
+);
+
+INSERT INTO seat_availability (projection_id, seat_id, taken) VALUES (1, 1, 0);
+INSERT INTO seat_availability (projection_id, seat_id, taken) VALUES (1, 2, 0);
+INSERT INTO seat_availability (projection_id, seat_id, taken) VALUES (1, 3, 0);
+INSERT INTO seat_availability (projection_id, seat_id, taken) VALUES (1, 4, 0);
+INSERT INTO seat_availability (projection_id, seat_id, taken) VALUES (1, 5, 0);
+INSERT INTO seat_availability (projection_id, seat_id, taken) VALUES (2, 11, 0);
+INSERT INTO seat_availability (projection_id, seat_id, taken) VALUES (2, 12, 0);
+INSERT INTO seat_availability (projection_id, seat_id, taken) VALUES (2, 13, 0);
+INSERT INTO seat_availability (projection_id, seat_id, taken) VALUES (2, 14, 0);
+INSERT INTO seat_availability (projection_id, seat_id, taken) VALUES (2, 15, 0);
+INSERT INTO seat_availability (projection_id, seat_id, taken) VALUES (3, 6, 0);
+INSERT INTO seat_availability (projection_id, seat_id, taken) VALUES (3, 7, 0);
+INSERT INTO seat_availability (projection_id, seat_id, taken) VALUES (3, 8, 0);
+INSERT INTO seat_availability (projection_id, seat_id, taken) VALUES (3, 9, 0);
+INSERT INTO seat_availability (projection_id, seat_id, taken) VALUES (3, 10, 0);

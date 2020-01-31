@@ -5,7 +5,6 @@ public class Seat {
 	private Integer id;
 	private Integer number;
 	private int theater;
-	private int available;
 	
 		
 	public Seat() {
@@ -13,12 +12,12 @@ public class Seat {
 	}
 
 
-	public Seat(Integer id, Integer number, int theater, int available) {
+	public Seat(Integer id, Integer number, int theater) {
 		
 		this.id = id;
 		this.number = number;
 		this.theater = theater;
-		this.available = available;
+
 	}
 
 	
@@ -48,14 +47,6 @@ public class Seat {
 
 	public void setTheater(int theater) {
 		this.theater = theater;
-	}
-	
-	public int getAvailable() {
-		return available;
-	}
-	
-	public void setAvailable(int available) {
-		this.available = available;
 	}
 	
 	
