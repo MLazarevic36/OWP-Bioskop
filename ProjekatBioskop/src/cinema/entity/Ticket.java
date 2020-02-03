@@ -9,18 +9,23 @@ public class Ticket {
 	private Integer seat;
 	private Date dateAndTimeOfPurchase;
 	private Integer buyer;
+	private String dateOutput;
+	private double price;
 	
 	public Ticket() {
 		
 	}
 
-	public Ticket(Integer id, Integer projection, Integer seat, Date dateAndTimeOfPurchase, Integer buyer) {
+	public Ticket(Integer id, Integer projection, Integer seat, Date dateAndTimeOfPurchase,
+			Integer buyer, String dateOutput, double price) {
 		
 		this.id = id;
 		this.projection = projection;
 		this.seat = seat;
 		this.dateAndTimeOfPurchase = dateAndTimeOfPurchase;
 		this.buyer = buyer;
+		this.dateOutput = dateOutput;
+		this.price = price;
 	}
 
 	public Integer getId() {
@@ -63,6 +68,21 @@ public class Ticket {
 		this.buyer = buyer;
 	}
 	
+	public String getDateOutput() {
+		return dateOutput;
+	}
+
+	public void setDateOutput(String dateOutput) {
+		this.dateOutput = dateOutput;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
 	
 	
 	

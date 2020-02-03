@@ -177,4 +177,24 @@
     <servlet-name>UseridServlet</servlet-name>
     <url-pattern>/UseridServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>SingleUserServlet</display-name>
+    <servlet-name>SingleUserServlet</servlet-name>
+    <servlet-class>cinema.servlet.SingleUserServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SingleUserServlet</servlet-name>
+    <url-pattern>/SingleUserServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>SingleTicketServlet</display-name>
+    <servlet-name>SingleTicketServlet</servlet-name>
+    <servlet-class>cinema.servlet.SingleTicketServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SingleTicketServlet</servlet-name>
+    <url-pattern>/SingleTicketServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

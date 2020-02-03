@@ -192,6 +192,59 @@ var TicketManager = {
 			})
 			
 			
+		},
+		
+		getAll : function(ID) {
+			params = {
+					'id': ID 
+			};
+			$.get('TicketServlet', params, function(data){
+				$('#ticketsTable1').DataTable ({
+					data: data.tickets,
+					paging: false,
+					info: false,
+					searching: false,
+					autoWidth: true,
+					columns: [
+							{
+							"data": 'dateOutput',
+							render:function(data, type, row){
+								return '<a id="ticketRedirectionFromTable" data-id="' + row.id + '" href="#">' + data + '</a>';
+								}
+							}
+							
+						]
+				
+				})
+			})
+		},
+		
+		getSingleTicket : function(ID) {
+			params = {
+				'id' : ID
+			};
+			$.get('SingleTicketServlet', params, function(data) {
+				$('#singleTicketMovie').text('');
+				$('#singleTicketProjection').text('');
+				$('#singleTicketSeat').text('');
+				$('#singleTicketProjectionType').text('');
+				$('#singleTicketTheater').text('');
+				$('#singleTicketBuyer').text('');
+				$('#singleTicketPrice').text('');
+				$('#hiddenProjectionId').text('');
+				$('#singleTicketMovie').append('Title: ' + '<a id="movieRedirectFromSingleTicket" data-name="' + data.singleTicket.movieTitle + '" href="#">' + data.singleTicket.movieTitle + '</a>');
+				$('#singleTicketProjection').append('Date and time: '+ '<a id="projectionRedirectFromSingleTicket" data-id="' + data.singleTicket.dateOutputTimeOfProjection + '" href="#">' + data.singleTicket.dateOutputTimeOfProjection + '</a>');
+				$('#singleTicketSeat').append('Seat: ' + data.singleTicket.seat);
+				$('#singleTicketTheater').append('Theater: ' + data.singleTicket.theater);
+				$('#singleTicketProjectionType').append('Projection type: ' + data.singleTicket.projectionType);
+				$('#singleTicketBuyer').append('Buyer: ' + '<a id="userRedirectFromSingleTicket" data-name="' + data.singleTicket.buyer + '" href="#">' + data.singleTicket.buyer + '</a>');
+				$('#singleTicketPrice').append('Price: ' + data.singleTicket.price);
+				$('#hiddenProjectionId').val(data.singleTicket.projectionId);
+				console.log(data);
+			})
+			
+			
+			
 		}
 		
 
@@ -489,6 +542,36 @@ var UsersManager = {
 						]
 				})
 			})
+		},
+		
+		populateUserProfile : function(ID) {
+			params = {
+					'user_id' : ID
+			};
+			$.get('SingleUserServlet', params, function(data){
+				var baseUrl = (window.location).href;
+		    	var user_id = baseUrl.substring(baseUrl.lastIndexOf('=') + 1);
+				TicketManager.getAll(user_id);
+				$('#usernameDetail').text('');
+				$('#userRegistrationDateAndTimeDetail').text('');
+				$('#userRoleDetail').text('');
+				$('#usernameDetail').append('Username: ' + data.user.username);
+				$('#userRegistrationDateAndTimeDetail').append('Registration time: ' + data.user.dateOutput);
+				$('#userRoleDetail').append('Role: ' + data.user.role);
+				
+			})
+		},
+		
+		populateCurrentUserProfile : function() {
+			params = {
+				'action': 'loggedInUserId'	
+			};
+			$.get('UseridServlet', params, function(data){
+				window.location.href = "#";
+		        window.location.href += '?id=' + data.loggedInUserId;
+				UsersManager.populateUserProfile(data.loggedInUserId);
+				
+			})
 		}
 }
 
@@ -518,6 +601,8 @@ var StateManager = {
 					$('#buyTicketFromMovieSection').hide();
 					$('#usersSection').hide();
 					$('#ticketDetail').hide();
+					$('#userDetail').hide();
+					$('#singleTicket').hide();
 				}
 				if(data.loggedInUserRole === "USER") {
 					$('#ProfileBtn').show();
@@ -538,6 +623,8 @@ var StateManager = {
 					$('#buyTicketFromMovieSection').hide();
 					$('#usersSection').hide();
 					$('#ticketDetail').hide();
+					$('#userDetail').hide();
+					$('#singleTicket').hide();
 				}
 			})
 			$('#ProfileBtn').hide();
@@ -555,6 +642,8 @@ var StateManager = {
 			$('#buyTicketFromMovieSection').hide();
 			$('#usersSection').hide();
 			$('#ticketDetail').hide();
+			$('#userDetail').hide();
+			$('#singleTicket').hide();
 		},
 		
 		loggingState: function(){
@@ -600,6 +689,7 @@ var StateManager = {
 			$('#projectionDetail').hide();
 			$('#buyTicketFromMovieSection').hide();
 			$('#usersSection').show();
+			$('#singleTicket').hide();
 		},
 		
 		moviesState: function() {
@@ -627,6 +717,8 @@ var StateManager = {
 					$('#usersSection').hide();
 					$('#buyTicketFromMovieSection').hide();
 					$('#moviesTable1').dataTable().fnSetColumnVis(5, true);
+					$('#userDetail').hide();
+					$('#singleTicket').hide();
 					
 				}
 				if(data.loggedInUserRole === "USER") {
@@ -645,6 +737,8 @@ var StateManager = {
 					$('#LogoutBtn').show();
 					$('#usersSection').hide();
 					$('#buyTicketFromMovieSection').hide();
+					$('#userDetail').hide();
+					$('#singleTicket').hide();
 				}
 			})
 			$('#ProfileBtn').hide();
@@ -661,6 +755,8 @@ var StateManager = {
 			$('#projectionDetail').hide();
 			$('#buyTicketFromMovieSection').hide();
 			$('#usersSection').hide();
+			$('#userDetail').hide();
+			$('#singleTicket').hide();
 			
 		},
 		
@@ -681,6 +777,8 @@ var StateManager = {
 					$('#buyTicketFromMovieSection').hide();
 					$('#projectionDetail').hide();
 					$('#usersSection').hide();
+					$('#userDetail').hide();
+					$('#singleTicket').hide();
 				}
 				if(data.loggedInUserRole === "USER") {
 					$('#movieDetail').show();
@@ -694,6 +792,8 @@ var StateManager = {
 					$('#buyTicketFromMovieSection').hide();
 					$('#projectionDetail').hide();
 					$('#usersSection').hide();
+					$('#userDetail').hide();
+					$('#singleTicket').hide();
 				}
 			$('#movieDetail').show();
 			$('#updateMovieForm').hide();
@@ -702,6 +802,8 @@ var StateManager = {
 			$('#buyTicketFromMovieSection').hide();
 			$('#projectionDetail').hide();
 			$('#usersSection').hide();
+			$('#userDetail').hide();
+			$('#singleTicket').hide();
 			});
 		},
 		
@@ -716,6 +818,7 @@ var StateManager = {
 					$('#projectionsCommands').show();
 					$('#buyTicket').hide();
 					$('#buyTicketFromMovieSection').hide();
+					
 						
 				}
 				if(data.loggedInUserRole === "USER") {
@@ -773,6 +876,50 @@ var StateManager = {
 				})
 			})
 			
+		},
+		
+		userProfileState : function () {
+			params = {
+					'action':'loggedInUserRole'
+			};
+			$.get('UserServlet', params, function(data){
+				if(data.loggedInUserRole === "ADMIN") {
+					$('#projectionsSection').hide();
+					$('#userDetail').show();
+					$('#ticketsTable1').dataTable().fnDestroy();
+					$('#ticketsTable').hide();
+					$('#buyTicket').hide();
+			    	$('#ticketDetail').hide();
+			    	$('#usersSection').hide();
+			    	$('#moviesSection').hide();
+			    	$('#singleTicket').hide();
+			    	$('#movieDetail').hide();
+			    	$('#movieCommands').hide();
+			     	$('#projectionDetail').hide();
+			    	$('#projectionCommands').hide();
+			    	$('#buyTicketFromMovieSection').hide();
+						
+				}
+				if(data.loggedInUserRole === "USER") {
+					$('#projectionsSection').hide();
+					$('#ticketsTable1').dataTable().fnDestroy();
+					$('#userDetail').show();
+					$('#changeUserRoleAdmin').hide();
+					$('#deleteUser').hide();
+					$('#deleteTicket').hide();
+					$('#buyTicket').hide();
+			    	$('#ticketDetail').hide();
+			    	$('#usersSection').hide();
+			    	$('#moviesSection').hide();
+			    	$('#singleTicket').hide();
+			    	$('#movieDetail').hide();
+			    	$('#movieCommands').hide();
+			    	$('#projectionDetail').hide();
+			    	$('#projectionCommands').hide();
+			    	$('#buyTicketFromMovieSection').hide();
+			    	$('#singleTicketBuyer').hide();
+				}
+			});
 		}
 		
 }
@@ -823,6 +970,7 @@ $(document).ready(function() {
 	$('#UsersBtn').click(function(e){
 		e.preventDefault();
 		StateManager.usersState();
+		$('#userDetail').hide();
 	});
 	
 	$('#buyTicketFromMovie').click(function(e){
@@ -916,6 +1064,14 @@ $(document).ready(function() {
       
     });
     
+    $('body').on('click', '#movieRedirectFromSingleTicket', function(e){
+        var name= $(this).attr("data-name");
+		MoviesManager.getMovieByTitle(name);
+		StateManager.detailedMovieState();
+		$('#singleTicket').hide();
+      
+    });
+    
     $('body').on('click', '#movieRedirectFromTicketDetail', function(e){
         var name= $(this).attr("data-name");
 		MoviesManager.getMovieByTitle(name);
@@ -958,6 +1114,15 @@ $(document).ready(function() {
               
     });
     
+    $('body').on('click', '#projectionRedirectFromSingleTicket', function(e){
+        var id = $('#hiddenProjectionId').val();
+        ProjectionsManager.getProjection(id);
+        StateManager.detailedProjectionState();
+        $('#userDetail').hide();
+        $('#singleTicket').hide();
+              
+    });
+    
     
     
     $('body').on('click', '#projectionRedirectFromBuyTicket', function(e){
@@ -984,6 +1149,19 @@ $(document).ready(function() {
         $('#buyTicket').show();
                       
     });
+    
+    $('body').on('click', '#ticketRedirectionFromTable', function(e){
+        var id= $(this).attr("data-id");
+        e.target.href = "#";
+        e.target.href += '?id=' + id;
+        TicketManager.getSingleTicket(id);
+        $('#singleTicket').show();
+        $('#hiddenProjectionId').hide();
+        
+                      
+    });
+    
+    
     
     $('#updateMovieFromDetail').click(function(e) {
 		$('#updateMovieForm').toggle();
@@ -1032,6 +1210,13 @@ $(document).ready(function() {
     	$('#buyTicket').hide();
         $('#ticketDetail').show();
     });
+    
+    $('#ProfileBtn').click(function(e){
+    	e.preventDefault();
+    	UsersManager.populateCurrentUserProfile();
+    	StateManager.userProfileState();
+    	
+    })
 	
 	
 });

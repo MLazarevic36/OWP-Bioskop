@@ -1,11 +1,16 @@
 package cinema.servlet;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import cinema.dao.TicketDAO;
 import cinema.entity.Ticket;
 
@@ -13,8 +18,24 @@ public class TicketServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		
+		String user_id = request.getParameter("id");
+		Integer buyer_id = Integer.parseInt(user_id);
+		List<Ticket> tickets = TicketDAO.getAll(buyer_id); 
+		
+		Map<String, Object> data = new HashMap<>();
+		data.put("tickets", tickets);
+		
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonData = mapper.writeValueAsString(data);
+		
+		response.setContentType("application/json");
+		response.getWriter().write(jsonData);
+		System.out.println(user_id);
+		System.out.println(buyer_id);
+		System.out.println(jsonData);
+		
+		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

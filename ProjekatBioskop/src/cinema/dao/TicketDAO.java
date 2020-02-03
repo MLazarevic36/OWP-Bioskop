@@ -63,6 +63,7 @@ public class TicketDAO {
 			String query = "SELECT * FROM tickets WHERE buyer = ?";
 			
 			ps = con.prepareStatement(query);
+			ps.setInt(1, user_id);
 			
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			
@@ -70,20 +71,22 @@ public class TicketDAO {
 			while (rs.next()) {
 				int index = 1;
 				int id = rs.getInt(index++);
-				String username = rs.getString(index++);
-				String password = rs.getString(index++);
-				String registrationdate = rs.getString(index++);
-				String role = rs.getString(index++);
-				Date date = sdf.parse(registrationdate);
-				User user = new User();
-				user.setId(id);
-				user.setUsername(username);
-				user.setPassword(password);
-				user.setRegistrationDate(date);
-				user.setRole(Role.valueOf(role));
-				user.setDateOutput(registrationdate);
+				Integer projection_id = rs.getInt(index++);
+				Integer seat_id = rs.getInt(index++);
+				String dateAndTimeOfPurchase = rs.getString(index++);
+				Date date = sdf.parse(dateAndTimeOfPurchase);
+				Double price = rs.getDouble(index++);
+				Integer buyer_id = rs.getInt(index++);
+				Ticket ticket = new Ticket();
+				ticket.setId(id);
+				ticket.setProjection(projection_id);
+				ticket.setSeat(seat_id);
+				ticket.setDateOutput(dateAndTimeOfPurchase);
+				ticket.setBuyer(buyer_id);
+				ticket.setPrice(price);
+				ticket.setDateAndTimeOfPurchase(date);
 				
-//				users.add(user);
+				tickets.add(ticket);
 			}
 			
 		} catch(Exception ex) {
@@ -94,6 +97,46 @@ public class TicketDAO {
 		}
 		
 		return tickets;
+	}
+	
+	public static Ticket get(Integer id) throws Exception {
+		Connection con = ConnectionManager.getConnection();
+		
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			String query = "SELECT * FROM tickets WHERE id = ?";
+			
+			ps = con.prepareStatement(query);
+			ps.setInt(1, id);
+			rs = ps.executeQuery();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			
+			if(rs.next()) {
+				int index = 1;
+				int id_rs = rs.getInt(index++);
+				int projection = rs.getInt(index++);
+				int seat = rs.getInt(index++);
+				String date_and_time = rs.getString(index++);
+				double price = rs.getDouble(index++);
+				int buyer = rs.getInt(index++);
+				
+				Ticket ticket = new Ticket();
+				ticket.setId(id_rs);
+				ticket.setProjection(projection);
+				ticket.setSeat(seat);
+				ticket.setDateOutput(date_and_time);
+				ticket.setPrice(price);
+				ticket.setBuyer(buyer);
+				
+				
+				return ticket;
+			}
+		}finally {
+			try {ps.close();} catch (Exception ex1) {ex1.printStackTrace();}
+			try {rs.close();} catch (Exception ex1) {ex1.printStackTrace();}
+		}
+		return null;
 	}
 
 }
