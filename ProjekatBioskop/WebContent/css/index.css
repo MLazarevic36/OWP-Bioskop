@@ -88,7 +88,6 @@ a {
 
 #moviesSearchBox {
 	width:100%;
-	overflow:hidden;
 	position:relative;
 }
 
@@ -108,9 +107,19 @@ a {
  
  #searchMovieBtnBox {
 
- 	float:right;
+ 	float:left;
  	position:relative;
  }
+ 
+ #durationSearch {
+ 	float:right;
+ 	position:relative;
+ 	width:25%;
+ }
+ 
+ #labelFrom, #labelTo {
+	color: black;
+}
 
 label {
 	color: white;
@@ -119,3 +128,4 @@ label {
 h2 {
 	color: white;
 }
+

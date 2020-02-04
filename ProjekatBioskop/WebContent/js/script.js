@@ -412,6 +412,95 @@ var MoviesManager = {
 			});
 		},
 		
+		searchMoviesByDuration : function() {
+			var searchMovieDurationFrom = $('#durationFrom').val();
+			var searchMovieDurationTo = $('#durationTo').val();
+			var params = {
+					'searchOptionsBox': 'duration',
+					'durationFrom': searchMovieDurationFrom,
+					'durationTo': searchMovieDurationTo
+			};
+			$('#moviesTable1').dataTable().fnClearTable();
+			$.get('SearchMoviesServlet', params, function(data) {
+				for(m in data.filteredMovies) {
+					$('#moviesTable1').dataTable().fnDestroy();
+					$('#moviesTable1').DataTable({
+						data: data.filteredMovies,
+						paging: false,
+						info: false,
+						searching: false,
+						autoWidth: true,
+						columns: [
+							{
+								"data" : 'title',
+								render:function(data, type, row){
+									return '<a id="movieRedirect" href="" data-id="' + row.id + '">' + data + '</a>';
+								}
+							},
+							{data : 'duration'},
+							{data : 'distributor'},
+							{data : 'originCountry'},
+							{data : 'yearOfProduction'},
+							{
+								"data": null,
+								render:function(data, type, row)
+								{
+									return '<button id="deleteMovie" data-id="' + data.id + '">Delete</button>'
+								},
+								"targets": -1,
+								"visible": false
+							}
+						]
+					})
+					
+				}
+			});
+		},
+		
+		searchMoviesByDurationAdmin : function() {
+			var searchMovieDurationFrom = $('#durationFrom').val();
+			var searchMovieDurationTo = $('#durationTo').val();
+			var params = {
+					'searchOptionsBox': 'duration',
+					'durationFrom': searchMovieDurationFrom,
+					'durationTo': searchMovieDurationTo
+			};
+			$('#moviesTable1').dataTable().fnClearTable();
+			$.get('SearchMoviesServlet', params, function(data) {
+				for(m in data.filteredMovies) {
+					$('#moviesTable1').dataTable().fnDestroy();
+					$('#moviesTable1').DataTable({
+						data: data.filteredMovies,
+						paging: false,
+						info: false,
+						searching: false,
+						autoWidth: true,
+						columns: [
+							{
+								"data" : 'title',
+								render:function(data, type, row){
+									return '<a id="movieRedirect" href="" data-id="' + row.id + '">' + data + '</a>';
+								}
+							},
+							{data : 'duration'},
+							{data : 'distributor'},
+							{data : 'originCountry'},
+							{data : 'yearOfProduction'},
+							{
+								"data": null,
+								render:function(data, type, row)
+								{
+									return '<button id="deleteMovie" data-id="' + data.id + '">Delete</button>'
+								},
+								"targets": -1
+							}
+						]
+					})
+					
+				}
+			});
+		},
+		
 		
 		addMovie : function() {
 			var title = $('#newMovieTitle').val();
@@ -1071,6 +1160,25 @@ $(document).ready(function() {
 		MoviesManager.searchMovies();
 	});
 	
+	$('#durationSearchBtn').click(function(e) {
+		e.preventDefault();
+		params = {
+				'action':'loggedInUserRole'
+		};
+		$.get('UserServlet', params, function(data){
+			if(data.loggedInUserRole === "ADMIN") {
+				MoviesManager.searchMoviesByDurationAdmin();
+			}
+			if(data.loggedInUserRole === "USER"){
+				MoviesManager.searchMoviesByDuration();
+			}
+			
+		});
+		MoviesManager.searchMoviesByDuration();
+	});
+	
+	
+	
 	$('#btnConfirmLogin').click(function(e) {
 		e.preventDefault();
 		UsersManager.logIn();
@@ -1332,6 +1440,16 @@ $(document).ready(function() {
         $('#projectionTicketsTable').hide();
                       
     });
+    
+    $('body').on('click', '#userRedirectFromSingleTicket', function(e){
+        var id= $(this).attr("data-name");
+        e.target.href = "#";
+        e.target.href += '?id=' + id;
+        UsersManager.populateUserProfileByUsername(id);
+        StateManager.userProfileState();                      
+    });
+    
+    
     
     $('body').on('click', '#ticketRedirectionFromTable', function(e){
         var id= $(this).attr("data-id");

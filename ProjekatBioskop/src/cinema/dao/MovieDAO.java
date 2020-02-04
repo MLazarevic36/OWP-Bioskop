@@ -262,6 +262,57 @@ public class MovieDAO {
 		
 	}
 	
+	public static List<Movie> searchMoviesByDuration(Integer durationMin, Integer durationMax) {
+		List<Movie> movies = new ArrayList<>();
+		
+		Connection con = ConnectionManager.getConnection();
+		
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		
+		String query = "SELECT * FROM movies WHERE duration BETWEEN ? AND ?";
+		
+		try {
+			ps = con.prepareStatement(query);
+			int index = 1;
+			ps.setInt(index++, durationMin);
+			ps.setInt(index++, durationMax);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				index = 1;
+				int id = rs.getInt(index++);
+				String title_rs = rs.getString(index++);
+				String duration = rs.getString(index++);
+				String distributor_rs = rs.getString(index++);
+				String originCountry_rs = rs.getString(index++);
+				int yearOfProduction_rs = rs.getInt(index++);
+				
+				Movie movie = new Movie();
+				movie.setId(id);
+				movie.setTitle(title_rs);
+				movie.setDuration(duration);
+				movie.setDistributor(distributor_rs);
+				movie.setOriginCountry(originCountry_rs);
+				movie.setYearOfProduction(yearOfProduction_rs);
+				
+				movies.add(movie);
+						
+			}
+			
+		} catch (Exception e) {
+			System.out.println("SQL query error!");
+			System.out.println(ps);
+			e.printStackTrace();
+		} finally {
+			try {ps.close();} catch (Exception ex1) {ex1.printStackTrace();}
+			try {rs.close();} catch (Exception ex1) {ex1.printStackTrace();}
+		}
+		
+		return movies;
+		
+	}
+	
 	public static boolean addMovie(Movie movie) {
 		Connection con = ConnectionManager.getConnection();
 		PreparedStatement ps = null;

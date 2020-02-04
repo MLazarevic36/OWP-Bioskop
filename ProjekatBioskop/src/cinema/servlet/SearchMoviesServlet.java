@@ -43,6 +43,14 @@ public class SearchMoviesServlet extends HttpServlet {
 				case "yearOfProduction":
 					filteredMovies = MovieDAO.searchMoviesByYearOfProduction(searchInput);
 					break;
+				case "duration":
+					String durationFrom = request.getParameter("durationFrom");
+					String durationTo = request.getParameter("durationTo");
+					Integer durationF = Integer.parseInt(durationFrom);
+					Integer durationT = Integer.parseInt(durationTo);
+					filteredMovies = MovieDAO.searchMoviesByDuration(durationF, durationT);
+					break;
+					
 				default:
 					break;
 				}	
