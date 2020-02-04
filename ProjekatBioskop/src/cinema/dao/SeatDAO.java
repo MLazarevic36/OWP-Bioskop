@@ -147,6 +147,23 @@ public class SeatDAO {
 		
 	}
 	
+	public static boolean updateSeatAvailable(Integer projection_id, Integer seat_id) throws Exception {
+		Connection con = ConnectionManager.getConnection();
+		PreparedStatement ps = null;
+		try {
+			String query = "UPDATE seat_availability SET taken = 0 WHERE projection_id = ? and seat_id = ?";
+			ps = con.prepareStatement(query);
+			ps.setInt(1, projection_id);
+			ps.setInt(2, seat_id);
+			
+			return ps.executeUpdate() == 1;
+					
+		}finally {
+			try {ps.close();} catch (Exception ex1) {ex1.printStackTrace();}
+		}
+		
+	}
+	
 	public static boolean addSeatAvailable(Integer projection_id, Integer seat_id) {
 		Connection con = ConnectionManager.getConnection();
 		PreparedStatement ps = null;

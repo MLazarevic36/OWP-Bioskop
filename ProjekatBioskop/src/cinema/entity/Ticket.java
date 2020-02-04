@@ -11,13 +11,14 @@ public class Ticket {
 	private Integer buyer;
 	private String dateOutput;
 	private double price;
+	private String buyerName;
 	
 	public Ticket() {
 		
 	}
 
 	public Ticket(Integer id, Integer projection, Integer seat, Date dateAndTimeOfPurchase,
-			Integer buyer, String dateOutput, double price) {
+			Integer buyer, String dateOutput, double price, String buyerName) {
 		
 		this.id = id;
 		this.projection = projection;
@@ -26,6 +27,7 @@ public class Ticket {
 		this.buyer = buyer;
 		this.dateOutput = dateOutput;
 		this.price = price;
+		this.buyerName = buyerName;
 	}
 
 	public Integer getId() {
@@ -82,6 +84,14 @@ public class Ticket {
 
 	public void setPrice(double price) {
 		this.price = price;
+	}
+
+	public String getBuyerName() {
+		return buyerName;
+	}
+
+	public void setBuyerName(String buyerName) {
+		this.buyerName = buyerName;
 	}
 	
 	

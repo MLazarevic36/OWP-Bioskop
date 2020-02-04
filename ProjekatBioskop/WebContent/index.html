@@ -239,8 +239,21 @@
 			<div>
 				<button id="buyTicket">Buy ticket</button>
 			</div>
-			
 	</div>
+	<div id="projectionTicketsTable">
+		<table id="projectionTicketsTable1" class="table table-striped table-bordered">
+			<thead>
+				<tr>
+					<th>Time of purchase</th>
+					<th>Buyer</th>
+				</tr>		
+			</thead>
+			<tbody id="projectionTicketsTbody">
+			
+			</tbody>
+		</table>
+	</div>
+	 
 	
 	<div id="buyTicketFromMovieSection">
 		<div id="buyTicketFromMovieTable">
@@ -310,6 +323,7 @@
 	</div>
 	
 	<div id="userDetail" class="flex-container">
+		<input type="hidden" id="hiddenUserId" />
 		<div class="inner-element">
 			<label style="font-size: 20px" id="usernameDetail"></label>
 		</div>
@@ -324,15 +338,32 @@
 		<div class="inner-element">
 			<button id="changePassword">Change password</button>
 		</div>
+		<div class="inner-element" id="updateUserPassword">
+			<label>Current password: </label>
+			<input type="password" id="currentPassword"></input>
+			<label>New password: </label>
+			<input type="password" id="newPassword"></input>
+			<button id="confirmPassword">Confirm new password</button>
+		</div>
+		<br>
 		<div class="inner-element">
 			<button id="changeUserRoleAdmin">Change user role</button>
 		</div>
+		<div id="updateUserRole" class="inner-element">
+			<select id="newUserRole" name="newUserRole" class="browser-default custom-select">  	
+			<option>Select role</option>
+			<option>ADMIN</option>
+			<option>USER</option>
+			</select>
+			<button id="confirmRole">Confirm new role</button>	
+		</div>
+		<br>
 		<div class="inner-element">
 			<button id="deleteUser">Delete user</button>
 		</div>
-		
+		<br>
 		<div id="ticketsTable">	
-	    <table id="ticketsTable1" class="table table-striped table-bordered" style="width:100%">
+	    <table id="ticketsTable1" class="table table-striped table-bordered">
 			<thead>
 				<tr>
 					<th>Time of purchase</th>

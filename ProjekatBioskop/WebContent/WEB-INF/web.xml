@@ -197,4 +197,24 @@
     <servlet-name>SingleTicketServlet</servlet-name>
     <url-pattern>/SingleTicketServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ProjectionTicketsServlet</display-name>
+    <servlet-name>ProjectionTicketsServlet</servlet-name>
+    <servlet-class>cinema.servlet.ProjectionTicketsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ProjectionTicketsServlet</servlet-name>
+    <url-pattern>/ProjectionTicketsServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>UsernameServlet</display-name>
+    <servlet-name>UsernameServlet</servlet-name>
+    <servlet-class>cinema.servlet.UsernameServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UsernameServlet</servlet-name>
+    <url-pattern>/UsernameServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

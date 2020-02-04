@@ -205,5 +205,62 @@ public static User get(String username) throws Exception {
 		
 	}
 	
+	public static boolean updatePassword(String password, Integer id) throws Exception {
+		Connection con = ConnectionManager.getConnection();
+		PreparedStatement ps = null;
+		try {
+			String query = "UPDATE users SET password = ? WHERE id = ?";
+			ps = con.prepareStatement(query);
+			int index = 1;
+			ps.setString(index++, password);
+			ps.setInt(index++, id);
+			
+			return ps.executeUpdate() == 1;
+					
+		}finally {
+			try {ps.close();} catch (Exception ex1) {ex1.printStackTrace();}
+		}
+		
+	}
+	
+	public static boolean updateRole(String role, Integer id) throws Exception {
+		Connection con = ConnectionManager.getConnection();
+		PreparedStatement ps = null;
+		try {
+			String query = "UPDATE users SET role = ? WHERE id = ?";
+			ps = con.prepareStatement(query);
+			int index = 1;
+			ps.setString(index++, role);
+			ps.setInt(index++, id);
+			
+			return ps.executeUpdate() == 1;
+					
+		}finally {
+			try {ps.close();} catch (Exception ex1) {ex1.printStackTrace();}
+		}
+		
+	}
+	
+	public static boolean delete(Integer id) {
+		Connection con = ConnectionManager.getConnection();
+		PreparedStatement ps = null;
+		
+		try {
+			
+			String query = "DELETE FROM users WHERE id = ?";
+			ps = con.prepareStatement(query);
+			ps.setInt(1, id);
+			
+			return ps.executeUpdate() == 1;
+			
+		}catch (Exception ex){
+			ex.printStackTrace();
+		}finally {
+			try {ps.close();} catch (Exception ex1) {ex1.printStackTrace();}
+		}
+		
+		return false;
+	}
+	
 	
 }

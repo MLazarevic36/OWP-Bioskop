@@ -121,7 +121,7 @@ var ProjectionsManager = {
 					'id': ID
 			};
 			$.get('ProjectionServlet', params, function(data){
-				
+				TicketManager.getAllByProjection(data.projection.id);
 				$('#projectionTitle').text('');
 				$('#projectionDateAndTime').text('');
 				$('#projectionType').text('');
@@ -219,6 +219,37 @@ var TicketManager = {
 			})
 		},
 		
+		getAllByProjection : function(ID) {
+			params = {
+					'id': ID 
+			};
+			$.get('ProjectionTicketsServlet', params, function(data){
+				$('#projectionTicketsTable1').DataTable ({
+					data: data.tickets,
+					paging: false,
+					info: false,
+					searching: false,
+					autoWidth: true,
+					columns: [
+							{
+							"data": 'dateOutput',
+							render:function(data, type, row){
+								return '<a id="ticketRedirectionFromTable" data-id="' + row.id + '" href="#">' + data + '</a>';
+								}
+							},
+							{
+								"data": 'buyerName',
+								render:function(data, type, row){
+									return '<a id="userRedirectProjectionTicketsTable" data-name="' + data + '" href="#">' + data + '</a>';
+									}
+							}
+							
+						]
+				
+				})
+			})
+		},
+		
 		getSingleTicket : function(ID) {
 			params = {
 				'id' : ID
@@ -240,10 +271,17 @@ var TicketManager = {
 				$('#singleTicketBuyer').append('Buyer: ' + '<a id="userRedirectFromSingleTicket" data-name="' + data.singleTicket.buyer + '" href="#">' + data.singleTicket.buyer + '</a>');
 				$('#singleTicketPrice').append('Price: ' + data.singleTicket.price);
 				$('#hiddenProjectionId').val(data.singleTicket.projectionId);
-				console.log(data);
 			})
-			
-			
+		},
+		
+		deleteTicket : function(ID) {
+			params = {
+					'action': 'deleteTicket',
+					'id': ID
+			};
+			$.post('TicketServlet', params, function(data){
+				console.log(data);
+			});
 			
 		}
 		
@@ -552,12 +590,38 @@ var UsersManager = {
 				var baseUrl = (window.location).href;
 		    	var user_id = baseUrl.substring(baseUrl.lastIndexOf('=') + 1);
 				TicketManager.getAll(user_id);
+				$('#hiddenUserId').text('');
 				$('#usernameDetail').text('');
 				$('#userRegistrationDateAndTimeDetail').text('');
 				$('#userRoleDetail').text('');
+				$('#currentPassword').text('');
 				$('#usernameDetail').append('Username: ' + data.user.username);
 				$('#userRegistrationDateAndTimeDetail').append('Registration time: ' + data.user.dateOutput);
 				$('#userRoleDetail').append('Role: ' + data.user.role);
+				$('#hiddenUserId').val(data.user.id);
+				$('#currentPassword').val(data.user.password);
+				
+			})
+		},
+		
+		populateUserProfileByUsername : function(ID) {
+			params = {
+					'user_name' : ID
+			};
+			$.get('UsernameServlet', params, function(data){
+				var baseUrl = (window.location).href;
+		    	var user_id = baseUrl.substring(baseUrl.lastIndexOf('=') + 1);
+				TicketManager.getAll(data.user.id);
+				$('#hiddenUserId').text('');
+				$('#usernameDetail').text('');
+				$('#userRegistrationDateAndTimeDetail').text('');
+				$('#userRoleDetail').text('');
+				$('#currentPassword').text('');
+				$('#usernameDetail').append('Username: ' + data.user.username);
+				$('#userRegistrationDateAndTimeDetail').append('Registration time: ' + data.user.dateOutput);
+				$('#userRoleDetail').append('Role: ' + data.user.role);
+				$('#hiddenUserId').val(data.user.id);
+				$('#currentPassword').val(data.user.password);
 				
 			})
 		},
@@ -571,6 +635,38 @@ var UsersManager = {
 		        window.location.href += '?id=' + data.loggedInUserId;
 				UsersManager.populateUserProfile(data.loggedInUserId);
 				
+			})
+		},
+		
+		updateUserPassword: function(ID, pass) {
+			params = {
+					'action': 'updateUserPassword',
+					'user-id': ID,
+					'password': pass
+			};
+			$.post('UserServlet', params, function(data){
+				console.log(data);
+			})
+		},
+		
+		updateUserRole: function(ID, user_role) {
+			params = {
+					'action': 'updateUserRole',
+					'user-id': ID,
+					'role': user_role
+			};
+			$.post('UserServlet', params, function(data){
+				console.log(data);
+			})
+		},
+		
+		deleteUser: function(ID) {
+			params = {
+					'action': 'deleteUser',
+					'user-id': ID
+			};
+			$.post('UserServlet', params, function(data){
+				console.log(data);
 			})
 		}
 }
@@ -603,6 +699,7 @@ var StateManager = {
 					$('#ticketDetail').hide();
 					$('#userDetail').hide();
 					$('#singleTicket').hide();
+					$('#projectionTicketsTable').hide();
 				}
 				if(data.loggedInUserRole === "USER") {
 					$('#ProfileBtn').show();
@@ -625,6 +722,7 @@ var StateManager = {
 					$('#ticketDetail').hide();
 					$('#userDetail').hide();
 					$('#singleTicket').hide();
+					$('#projectionTicketsTable').hide();
 				}
 			})
 			$('#ProfileBtn').hide();
@@ -644,6 +742,7 @@ var StateManager = {
 			$('#ticketDetail').hide();
 			$('#userDetail').hide();
 			$('#singleTicket').hide();
+			$('#projectionTicketsTable').hide();
 		},
 		
 		loggingState: function(){
@@ -660,6 +759,7 @@ var StateManager = {
 			$('#projectionDetail').hide();
 			$('#buyTicketFromMovieSection').hide();
 			$('#usersSection').hide();
+			$('#projectionTicketsTable').hide();
 		},
 		
 		registerState: function(){
@@ -676,6 +776,7 @@ var StateManager = {
 			$('#projectionDetail').hide();
 			$('#buyTicketFromMovieSection').hide();
 			$('#usersSection').hide();
+			$('#projectionTicketsTable').hide();
 		},
 		
 		usersState: function(){
@@ -690,6 +791,7 @@ var StateManager = {
 			$('#buyTicketFromMovieSection').hide();
 			$('#usersSection').show();
 			$('#singleTicket').hide();
+			$('#projectionTicketsTable').hide();
 		},
 		
 		moviesState: function() {
@@ -719,6 +821,7 @@ var StateManager = {
 					$('#moviesTable1').dataTable().fnSetColumnVis(5, true);
 					$('#userDetail').hide();
 					$('#singleTicket').hide();
+					$('#projectionTicketsTable').hide();
 					
 				}
 				if(data.loggedInUserRole === "USER") {
@@ -739,6 +842,7 @@ var StateManager = {
 					$('#buyTicketFromMovieSection').hide();
 					$('#userDetail').hide();
 					$('#singleTicket').hide();
+					$('#projectionTicketsTable').hide();
 				}
 			})
 			$('#ProfileBtn').hide();
@@ -757,6 +861,7 @@ var StateManager = {
 			$('#usersSection').hide();
 			$('#userDetail').hide();
 			$('#singleTicket').hide();
+			$('#projectionTicketsTable').hide();
 			
 		},
 		
@@ -779,6 +884,7 @@ var StateManager = {
 					$('#usersSection').hide();
 					$('#userDetail').hide();
 					$('#singleTicket').hide();
+					$('#projectionTicketsTable').hide();
 				}
 				if(data.loggedInUserRole === "USER") {
 					$('#movieDetail').show();
@@ -794,6 +900,7 @@ var StateManager = {
 					$('#usersSection').hide();
 					$('#userDetail').hide();
 					$('#singleTicket').hide();
+					$('#projectionTicketsTable').hide();
 				}
 			$('#movieDetail').show();
 			$('#updateMovieForm').hide();
@@ -804,6 +911,7 @@ var StateManager = {
 			$('#usersSection').hide();
 			$('#userDetail').hide();
 			$('#singleTicket').hide();
+			$('#projectionTicketsTable').hide();
 			});
 		},
 		
@@ -818,6 +926,7 @@ var StateManager = {
 					$('#projectionsCommands').show();
 					$('#buyTicket').hide();
 					$('#buyTicketFromMovieSection').hide();
+					$('#projectionTicketsTable').show();
 					
 						
 				}
@@ -887,7 +996,6 @@ var StateManager = {
 					$('#projectionsSection').hide();
 					$('#userDetail').show();
 					$('#ticketsTable1').dataTable().fnDestroy();
-					$('#ticketsTable').hide();
 					$('#buyTicket').hide();
 			    	$('#ticketDetail').hide();
 			    	$('#usersSection').hide();
@@ -898,6 +1006,10 @@ var StateManager = {
 			     	$('#projectionDetail').hide();
 			    	$('#projectionCommands').hide();
 			    	$('#buyTicketFromMovieSection').hide();
+			    	$('#projectionTicketsTable').hide();
+			    	$('#updateUserPassword').hide();
+			    	$('#updateUserRole').hide();
+			    	
 						
 				}
 				if(data.loggedInUserRole === "USER") {
@@ -918,6 +1030,9 @@ var StateManager = {
 			    	$('#projectionCommands').hide();
 			    	$('#buyTicketFromMovieSection').hide();
 			    	$('#singleTicketBuyer').hide();
+			    	$('#projectionTicketsTable').hide();
+			    	$('#updateUserPassword').hide();
+			    	$('#updateUserRole').hide();
 				}
 			});
 		}
@@ -960,6 +1075,51 @@ $(document).ready(function() {
 		e.preventDefault();
 		UsersManager.logIn();
 	});
+	
+	
+	$('#changePassword').click(function(e) {
+		e.preventDefault();
+		$('#updateUserPassword').toggle();
+	});
+	
+	$('#changeUserRoleAdmin').click(function(e) {
+		e.preventDefault();
+		$('#updateUserRole').toggle();
+	});
+	
+	$('#confirmPassword').click(function(e){
+		e.preventDefault();
+		var user_id = $('#hiddenUserId').val();
+		var password = $('#newPassword').val();
+		UsersManager.updateUserPassword(user_id, password);
+		$('#currentPassword').text('');
+		$('#currentPassword').val(password);
+		alert('Successfully changed password');
+		
+	});
+	
+	$('#confirmRole').click(function(e){
+		e.preventDefault();
+		var user_id = $('#hiddenUserId').val();
+		var role = $( "#newUserRole option:selected" ).text();
+		UsersManager.updateUserRole(user_id, role);
+		alert('Successfully changed role');
+	});
+	
+	$('#deleteUser').click(function(e){
+		e.preventDefault();
+		var user_id = $('#hiddenUserId').val();
+		UsersManager.deleteUser(user_id);
+		$('#userDetail').hide();
+		$('#usersTable1').dataTable().fnDestroy();
+		UsersManager.getAll();
+		StateManager.usersState();
+		alert('Successfully deleted user!');
+	});
+	
+	
+	
+	
 	
 	$('#LogoutBtn').click(function(e) {
 		e.preventDefault();
@@ -1150,13 +1310,43 @@ $(document).ready(function() {
                       
     });
     
+    $('body').on('click', '#userRedirectFromTable', function(e){
+        var id= $(this).attr("data-id");
+        e.target.href = "#";
+        e.target.href += '?id=' + id;
+        UsersManager.populateUserProfile(id);
+        StateManager.userProfileState();
+        $('#usersSection').hide();
+                      
+    });
+    
+    
+    $('body').on('click', '#userRedirectProjectionTicketsTable', function(e){
+        var id= $(this).attr("data-name");
+        e.target.href = "#";
+        e.target.href += '?id=' + id;
+        UsersManager.populateUserProfileByUsername(id);
+        StateManager.userProfileState();
+        $('#projectionsSection').hide();
+        $('#projectionsCommands').hide();
+        $('#projectionTicketsTable').hide();
+                      
+    });
+    
     $('body').on('click', '#ticketRedirectionFromTable', function(e){
         var id= $(this).attr("data-id");
         e.target.href = "#";
         e.target.href += '?id=' + id;
         TicketManager.getSingleTicket(id);
+//        $('#usernameDetail').hide();
+//        $('#userRegistrationDateAndTimeDetail').hide();
+//        $('#userRoleDetail').hide();
+//        $('#changePassword').hide();
+//        $('#changeUserRoleAdmin').hide();
+//        $('#deleteUser').hide();
         $('#singleTicket').show();
-        $('#hiddenProjectionId').hide();
+        
+        
         
                       
     });
@@ -1215,8 +1405,19 @@ $(document).ready(function() {
     	e.preventDefault();
     	UsersManager.populateCurrentUserProfile();
     	StateManager.userProfileState();
+    });
+    
+    $('#deleteTicket').click(function(e){
+    	var baseUrl = (window.location).href;
+    	var ticket_id = baseUrl.substring(baseUrl.lastIndexOf('=') + 1);
+    	var user_id = $('#hiddenUserId').val();
+    	TicketManager.deleteTicket(ticket_id);
+    	$('#singleTicket').hide();
+    	alert('Successfully deleted ticket!');
+    	$('#ticketsTable1').dataTable().fnDestroy();
+		TicketManager.getAll(user_id);
     	
-    })
+    });
 	
 	
 });

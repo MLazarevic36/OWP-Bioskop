@@ -99,6 +99,57 @@ public class TicketDAO {
 		return tickets;
 	}
 	
+public static List<Ticket> getAllByProjection(Integer projection_id) {
+		
+		List<Ticket> tickets = new ArrayList<>();
+		
+		Connection con = ConnectionManager.getConnection();
+		
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+			String query = "SELECT * FROM tickets WHERE projection = ?";
+			
+			ps = con.prepareStatement(query);
+			ps.setInt(1, projection_id);
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				int index = 1;
+				int id = rs.getInt(index++);
+				Integer projectionId = rs.getInt(index++);
+				Integer seat_id = rs.getInt(index++);
+				String dateAndTimeOfPurchase = rs.getString(index++);
+				Date date = sdf.parse(dateAndTimeOfPurchase);
+				Double price = rs.getDouble(index++);
+				Integer buyer_id = rs.getInt(index++);
+				User user = UserDAO.get(buyer_id);
+				
+				Ticket ticket = new Ticket();
+				ticket.setId(id);
+				ticket.setProjection(projectionId);
+				ticket.setSeat(seat_id);
+				ticket.setDateOutput(dateAndTimeOfPurchase);
+				ticket.setBuyer(buyer_id);
+				ticket.setPrice(price);
+				ticket.setDateAndTimeOfPurchase(date);
+				ticket.setBuyerName(user.getUsername());
+				tickets.add(ticket);
+			}
+			
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			try {ps.close();} catch (Exception ex1) {ex1.printStackTrace();}
+			try {rs.close();} catch (Exception ex1) {ex1.printStackTrace();}
+		}
+		
+		return tickets;
+	}
+	
 	public static Ticket get(Integer id) throws Exception {
 		Connection con = ConnectionManager.getConnection();
 		
@@ -137,6 +188,27 @@ public class TicketDAO {
 			try {rs.close();} catch (Exception ex1) {ex1.printStackTrace();}
 		}
 		return null;
+	}
+	
+	public static boolean delete(Integer id) {
+		Connection con = ConnectionManager.getConnection();
+		PreparedStatement ps = null;
+		
+		try {
+			
+			String query = "DELETE FROM tickets WHERE id = ?";
+			ps = con.prepareStatement(query);
+			ps.setInt(1, id);
+			
+			return ps.executeUpdate() == 1;
+			
+		}catch (Exception ex){
+			ex.printStackTrace();
+		}finally {
+			try {ps.close();} catch (Exception ex1) {ex1.printStackTrace();}
+		}
+		
+		return false;
 	}
 
 }

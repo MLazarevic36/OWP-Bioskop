@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import cinema.dao.MovieDAO;
+import cinema.dao.SeatDAO;
 import cinema.dao.TicketDAO;
 import cinema.entity.Ticket;
 
@@ -19,22 +22,18 @@ public class TicketServlet extends HttpServlet {
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String user_id = request.getParameter("id");
-		Integer buyer_id = Integer.parseInt(user_id);
-		List<Ticket> tickets = TicketDAO.getAll(buyer_id); 
-		
-		Map<String, Object> data = new HashMap<>();
-		data.put("tickets", tickets);
-		
-		ObjectMapper mapper = new ObjectMapper();
-		String jsonData = mapper.writeValueAsString(data);
-		
-		response.setContentType("application/json");
-		response.getWriter().write(jsonData);
-		System.out.println(user_id);
-		System.out.println(buyer_id);
-		System.out.println(jsonData);
-		
+				String user_id = request.getParameter("id");
+				Integer buyer_id = Integer.parseInt(user_id);
+				List<Ticket> tickets = TicketDAO.getAll(buyer_id); 
+				
+				Map<String, Object> data = new HashMap<>();
+				data.put("tickets", tickets);
+				
+				ObjectMapper mapper = new ObjectMapper();
+				String jsonData = mapper.writeValueAsString(data);
+				
+				response.setContentType("application/json");
+				response.getWriter().write(jsonData);
 		
 	}
 
@@ -55,6 +54,14 @@ public class TicketServlet extends HttpServlet {
 				Integer buyer_id = Integer.parseInt(buyer);
 				ticket.setBuyer(buyer_id);
 				TicketDAO.addTicket(ticket);
+			}
+			case "deleteTicket": {
+				String id = request.getParameter("id");
+				Integer delete_id = Integer.parseInt(id);
+				Ticket ticket = TicketDAO.get(delete_id);
+				TicketDAO.delete(delete_id);
+				SeatDAO.updateSeatAvailable(ticket.getProjection(), ticket.getSeat());
+				break;
 			}
 			}
 			

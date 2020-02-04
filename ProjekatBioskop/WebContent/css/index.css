@@ -74,6 +74,12 @@ a {
 	background-color: white;
 }
 
+#projectionTicketsTable {
+	width: 100%;
+	text-align: center;
+	background-color: white;
+}
+
 #buyTicketFromMovieTable {
 	width: 100%;
 	text-align: center;
