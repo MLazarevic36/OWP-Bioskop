@@ -117,8 +117,20 @@ a {
  	width:25%;
  }
  
- #labelFrom, #labelTo {
+ #labelFrom, #labelTo, #labelF, #labelT, #labelMin, #labelMax {
 	color: black;
+}
+
+#wrapper {
+  display: flex;
+}
+
+#projectionFilterDate {
+	flex: 0 0 35%;
+}
+
+#projectionFilterTicket {
+	flex: 1;
 }
 
 label {

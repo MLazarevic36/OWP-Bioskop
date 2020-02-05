@@ -30,6 +30,66 @@ var ProjectionsManager = {
 			})
 		},
 		
+		searchProjections : function() {
+			var $searchMovieDropdown = $('#projectionMovieFilter').find('option:selected');
+			var $searchProjectionTypeDropdown = $('#projectionTypeFilter').find('option:selected');
+			var $searchProjectionTheaterDropdown = $('#projectionTheaterFilter').find('option:selected');
+			var startDate = $('#dateFrom').val();
+			var endDate = $('#dateTo').val();
+			var minPrice = $('#priceFrom').val();
+			var maxPrice = $('#priceTo').val();
+			var movieTitle = $searchMovieDropdown.val();
+			if (movieTitle === 'Select movie') {
+				movieTitle = '';
+			}
+			var projectionType = $searchProjectionTypeDropdown.val();
+			if (projectionType === 'Select projection type') {
+				projectionType = '';
+			}
+			var theater = $searchProjectionTheaterDropdown.val();
+			if (theater === 'Select theater') {
+				theater = '';
+			}
+			var params = {
+					
+					'projectionMovieFilter': movieTitle,
+					'projectionTypeFilter': projectionType,
+					'projectionTheaterFilter': theater,
+					'projectionStartDate': startDate,
+					'projectionEndDate': endDate,
+					'projectionMinPrice' : minPrice,
+					'projectionMaxPrice' : maxPrice
+			};
+			$('#projectionsTable1').dataTable().fnDestroy();
+			$.get('SearchProjectionsServlet', params, function(data){
+				$('#projectionsTable1').DataTable ({
+					data: data.filteredProjections,
+					paging: false,
+					info: false,
+					searching: false,
+					autoWidth: true,
+					columns: [
+							{
+							"data": 'movie',
+							render:function(data, type, row){
+								return '<a id="movieRedirectFromProjection" data-name="' + data + '" href="#">' + data + '</a>';
+								}
+							},
+							{
+								"data" : 'dateOutput',
+								render:function(data, type, row){
+									return '<a id="projectionRedirect" data-id="' + row.id +'" href="#">' + data + '</a>';
+								}
+									
+							},
+							{data : 'projectionType'},
+							{data : 'theater'},
+							{data : 'ticketPrice'}
+						]
+				})
+			})
+		},
+		
 		populateMovieDropdown : function () {
 			
 			$.get('MoviesServlet', function(data){
@@ -38,6 +98,10 @@ var ProjectionsManager = {
 				$.each(newData, function(){
 					$dropdown.append($("<option />").val(this.id).text(this.title));
 				});
+				var $dropdownFilter = $('#projectionMovieFilter');
+				$.each(newData, function(){
+					$dropdownFilter.append($("<option />").val(this.id).text(this.title));
+				})
 		});
 			
 		},
@@ -49,6 +113,10 @@ var ProjectionsManager = {
 				$.each(newData, function(){
 					$dropdown.append($("<option />").val(this.id).text(this.name));
 				})
+				var $dropdownFilter = $('#projectionTypeFilter');
+				$.each(newData, function(){
+					$dropdownFilter.append($("<option />").val(this.id).text(this.name));
+				})
 			})
 			
 		},
@@ -59,6 +127,10 @@ var ProjectionsManager = {
 				var newData = data.theaters;
 				$.each(newData, function(){
 					$dropdown.append($("<option />").val(this.id).text(this.name));
+				})
+				var $dropdownFilter = $('#projectionTheaterFilter');
+				$.each(newData, function(){
+					$dropdownFilter.append($("<option />").val(this.id).text(this.name));
 				})
 			})
 		},
@@ -1537,5 +1609,18 @@ $(document).ready(function() {
     	
     });
 	
+    $('#submitProjectionFilter').click(function(e){
+    	e.preventDefault();
+    	ProjectionsManager.searchProjections();
+//    	var $searchMovieDropdown = $('#projectionMovieFilter').find('option:selected');
+//		var $searchProjectionTypeDropdown = $('#projectionTypeFilter').find('option:selected');
+//		var $searchProjectionTheaterDropdown = $('#projectionTheaterFilter').find('option:selected');
+//		var startDate = $('#dateFrom').val();
+//		var endDate = $('#dateTo').val();
+//		var minPrice = $('#priceFrom').val();
+//		var maxPrice = $('#priceTo').val();
+//    	console.log($searchMovieDropdown.val());
+    });
+    
 	
 });

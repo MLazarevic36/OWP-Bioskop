@@ -200,7 +200,38 @@
 		</div>
 		<br>
 	
-		<div id="projectionsTable">	
+		<div id="projectionsTable">
+		<div class="flex-containter" id="projectionsSearchBox">
+			<select id="projectionMovieFilter" name="projectionMovieFilter" class="inner-element" style="width:25%">  	
+			<option>Select movie</option>	
+			</select>
+			<select id="projectionTypeFilter" name="projectionTypeFilter" class="inner-element" style="width:25%">  	
+			<option>Select projection type</option>	
+			</select>
+			<select id="projectionTheaterFilter" name="projectionTheaterFilter" class="inner-element" style="width:25%">  	
+			<option>Select theater</option>	
+			</select>
+			<br>
+			<br>
+			<div id="wrapper">
+			<div id="projectionFilterDate">
+		      		<label id="labelF">Start date:</label>
+		      		<input type="date" id="dateFrom"  style="width:30%"></input>
+		      		<label id="labelT">End date:</label>
+		      		<input type="date" id="dateTo" style="width:30%"></input>
+		     </div>
+		     <div id="projectionFilterTicket">
+		      		<label  id="labelMin">Min price:</label>
+		      		<input type="number" id="priceFrom" style="width:15%"></input>
+		      		<label  id="labelMax">Max price:</label>
+		      		<input type="number" id="priceTo"  style="width:15%"></input>
+		     </div>
+		     <div id="projectionFilterSubmit">
+		     <button id="submitProjectionFilter" class="btn btn-primary" type="submit">Submit</button>
+		     </div>
+		     </div>
+		     
+		</div>	
 	    <table id="projectionsTable1" class="table table-striped table-bordered" style="width:100%">
 			<thead>
 				<tr>

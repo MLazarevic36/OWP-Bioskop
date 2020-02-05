@@ -217,4 +217,14 @@
     <servlet-name>UsernameServlet</servlet-name>
     <url-pattern>/UsernameServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>SearchProjectionsServlet</display-name>
+    <servlet-name>SearchProjectionsServlet</servlet-name>
+    <servlet-class>cinema.servlet.SearchProjectionsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SearchProjectionsServlet</servlet-name>
+    <url-pattern>/SearchProjectionsServlet</url-pattern>
+  </servlet-mapping>
 </web-app>
