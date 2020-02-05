@@ -80,6 +80,12 @@ public class UserServlet extends HttpServlet {
 				UserDAO.delete(user_id);
 				break;
 			}
+			case "registerUser": {
+				String register_username = request.getParameter("registerUsername");
+				String register_password = request.getParameter("registerPassword");
+				UserDAO.addUser(register_username, register_password);
+				break;
+			}
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();

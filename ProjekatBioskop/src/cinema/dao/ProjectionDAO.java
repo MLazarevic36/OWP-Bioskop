@@ -25,7 +25,7 @@ public static List<Projection> getAll() {
 		ResultSet rs = null;
 		
 		try {
-			String query = "SELECT * FROM projections";
+			String query = "SELECT * FROM projections ORDER BY movie, dateandtime";
 			
 			ps = con.prepareStatement(query);
 			

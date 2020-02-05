@@ -57,27 +57,8 @@ public class UserDAO {
 		
 	}
 	
-	public static boolean add(User user) throws Exception {
-		Connection con = ConnectionManager.getConnection();
-		
-		PreparedStatement ps = null;
-		try {
-			String query = "INSERT INTO users (username, password, registrationdate, role) " + "VALUES (?, ?, ?, ?)";
-			ps = con.prepareStatement(query);
-			int index = 1;
-			ps.setString(index++, user.getUsername());
-			ps.setString(index++, user.getPassword());
-			ps.setString(index++, user.getRegistrationDate().toString());
-			ps.setString(index++, user.getRole().toString());
-			
-			return ps.executeUpdate() == 1;
-		} finally {
-			try {ps.close();} catch (Exception ex1) {ex1.printStackTrace();}
-		}
-		
-	}
 	
-public static User get(String username) throws Exception {
+	public static User get(String username) throws Exception {
 		
 		Connection con = ConnectionManager.getConnection();
 		PreparedStatement ps = null;
@@ -262,5 +243,30 @@ public static User get(String username) throws Exception {
 		return false;
 	}
 	
+	public static boolean addUser(String username, String password) {
+		Connection con = ConnectionManager.getConnection();
+		PreparedStatement ps = null;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		try {
+			String query = "INSERT INTO users (username, password, registrationdate, role) "
+							+ "VALUES (?, ?, ?, ?)";
+			ps = con.prepareStatement(query);
+			int index = 1;
+			Date date = new Date();
+			String datefordb = sdf.format(date);
+			ps.setString(index++, username);
+			ps.setString(index++, password);
+			ps.setString(index++, datefordb);
+			ps.setString(index++, "USER");
+			
+			return ps.executeUpdate() == 1;
+		}catch (Exception ex) {
+			ex.printStackTrace();
+		}finally {
+			try {ps.close();} catch (Exception ex1) {ex1.printStackTrace();}
+		}
+		
+		return false;
+	}
 	
 }

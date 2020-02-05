@@ -829,6 +829,20 @@ var UsersManager = {
 			$.post('UserServlet', params, function(data){
 				console.log(data);
 			})
+		},
+		
+		registerUser : function() {
+			var regUsername = $('#RegUsername').val();
+			var regPassword = $('#RegPassword').val();
+			params = {
+					'action':'registerUser',
+					'registerUsername': regUsername,
+					'registerPassword': regPassword
+					
+			};
+			$.post('UserServlet', params, function(data){
+				console.log(data);
+			});
 		}
 }
 
@@ -1283,6 +1297,8 @@ $(document).ready(function() {
 		var user_id = $('#hiddenUserId').val();
 		var role = $( "#newUserRole option:selected" ).text();
 		UsersManager.updateUserRole(user_id, role);
+		$('#userRoleDetail').text('');
+		$('#userRoleDetail').append('Role: ' + role);
 		alert('Successfully changed role');
 	});
 	
@@ -1528,19 +1544,9 @@ $(document).ready(function() {
         e.target.href = "#";
         e.target.href += '?id=' + id;
         TicketManager.getSingleTicket(id);
-//        $('#usernameDetail').hide();
-//        $('#userRegistrationDateAndTimeDetail').hide();
-//        $('#userRoleDetail').hide();
-//        $('#changePassword').hide();
-//        $('#changeUserRoleAdmin').hide();
-//        $('#deleteUser').hide();
         $('#singleTicket').show();
-        
-        
-        
                       
     });
-    
     
     
     $('#updateMovieFromDetail').click(function(e) {
@@ -1612,15 +1618,16 @@ $(document).ready(function() {
     $('#submitProjectionFilter').click(function(e){
     	e.preventDefault();
     	ProjectionsManager.searchProjections();
-//    	var $searchMovieDropdown = $('#projectionMovieFilter').find('option:selected');
-//		var $searchProjectionTypeDropdown = $('#projectionTypeFilter').find('option:selected');
-//		var $searchProjectionTheaterDropdown = $('#projectionTheaterFilter').find('option:selected');
-//		var startDate = $('#dateFrom').val();
-//		var endDate = $('#dateTo').val();
-//		var minPrice = $('#priceFrom').val();
-//		var maxPrice = $('#priceTo').val();
-//    	console.log($searchMovieDropdown.val());
     });
+    
+    $('#btnConfirmRegister').click(function(e){
+    	e.preventDefault();
+    	UsersManager.registerUser();
+    	$('#RegisterForm').hide();
+    	StateManager.loggingState();
+    	alert('Successfully registered, please log in now!');
+    	
+    })
     
 	
 });
