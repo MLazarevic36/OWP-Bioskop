@@ -25,7 +25,7 @@ public static List<Projection> getAll() {
 		ResultSet rs = null;
 		
 		try {
-			String query = "SELECT * FROM projections ORDER BY movie, dateandtime";
+			String query = "SELECT * FROM projections WHERE dateandtime >= '2020-02-11' ORDER BY movie, dateandtime";
 			
 			ps = con.prepareStatement(query);
 			

@@ -856,7 +856,7 @@ var UsersManager = {
 		},
 		
 		searchUsers : function() {
-			var $searchUserRoleDropdown = $('#newUserRole').find('option:selected');
+			var $searchUserRoleDropdown = $('#searchUserRole').find('option:selected');
 			var usernameSearchInput = $('#usernameInputSearch').val();
 			var userRole = $searchUserRoleDropdown.val();
 			if (userRole === 'Select role') {
@@ -1330,11 +1330,11 @@ $(document).ready(function() {
 	
 	$('#confirmRole').click(function(e){
 		e.preventDefault();
-		var user_id = $('#hiddenUserId').val();
-		var role = $( "#newUserRole option:selected" ).text();
-		UsersManager.updateUserRole(user_id, role);
+		var user_id = $('#hiddenUserId').val(); 
+		var $role = $('#newUserRole').find('option:selected'); 
+		UsersManager.updateUserRole(user_id, $role.val());
 		$('#userRoleDetail').text('');
-		$('#userRoleDetail').append('Role: ' + role);
+		$('#userRoleDetail').append('Role: ' + $role.val());
 		alert('Successfully changed role');
 	});
 	

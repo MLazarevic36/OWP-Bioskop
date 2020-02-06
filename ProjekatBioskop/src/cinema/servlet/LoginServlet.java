@@ -1,17 +1,11 @@
 package cinema.servlet;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import cinema.dao.UserDAO;
 import cinema.entity.User;
 
@@ -36,7 +30,6 @@ public class LoginServlet extends HttpServlet {
 			if (user == null) {
 				request.getRequestDispatcher("./FailureServlet").forward(request, response);
 			}
-			
 			HttpSession httpSession = request.getSession();
 			if(user.getUsername() == null) {
 				request.getRequestDispatcher("./FailureServlet").forward(request, response);
@@ -49,5 +42,6 @@ public class LoginServlet extends HttpServlet {
 		
 		return;
 	}
+	
+}	
 
-}
