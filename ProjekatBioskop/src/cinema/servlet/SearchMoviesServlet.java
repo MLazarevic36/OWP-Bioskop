@@ -22,33 +22,29 @@ public class SearchMoviesServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String searchOptionBox = request.getParameter("searchOptionsBox");
-//		String title = request.getParameter("title");
-//		String distributor = request.getParameter("distributor");
-//		String originCountry = request.getParameter("originCountry");
-//		Integer yearOfProduction = Integer.parseInt(request.getParameter("yearOfProduction"));
 		String searchInput = request.getParameter("searchMovieInput");
+		String durationMin = null;
+		durationMin = request.getParameter("durationMin");
+		String durationMax = null;
+		durationMax = request.getParameter("durationMax");
 		List<Movie> filteredMovies = new ArrayList<>();
 		
 		if(searchOptionBox != null) {
 			switch(searchOptionBox) {
 				case "title":
-					 filteredMovies = MovieDAO.searchMoviesByTitle(searchInput);
+					filteredMovies = MovieDAO.searchMoviesByTitle(searchInput, durationMin, durationMax);
 					break;
 				case "distributor":
-					filteredMovies = MovieDAO.searchMoviesByDistributor(searchInput);
+					filteredMovies = MovieDAO.searchMoviesByDistributor(searchInput, durationMin, durationMax);
 					break;
 				case "originCountry":
-					filteredMovies = MovieDAO.searchMoviesByOriginCountry(searchInput);
+					filteredMovies = MovieDAO.searchMoviesByOriginCountry(searchInput, durationMin, durationMax);
 					break;
 				case "yearOfProduction":
-					filteredMovies = MovieDAO.searchMoviesByYearOfProduction(searchInput);
+					filteredMovies = MovieDAO.searchMoviesByYearOfProduction(searchInput, durationMin, durationMax);
 					break;
-				case "duration":
-					String durationFrom = request.getParameter("durationFrom");
-					String durationTo = request.getParameter("durationTo");
-					Integer durationF = Integer.parseInt(durationFrom);
-					Integer durationT = Integer.parseInt(durationTo);
-					filteredMovies = MovieDAO.searchMoviesByDuration(durationF, durationT);
+				case "searchMoviesBy":
+					filteredMovies = MovieDAO.searchMoviesByDuration(durationMin, durationMax);
 					break;
 					
 				default:

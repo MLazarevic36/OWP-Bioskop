@@ -400,9 +400,13 @@ var MoviesManager = {
 		searchMovies : function() {
 			var $searchOptionBox = $('#searchOptionsBox').find('option:selected');
 			var searchMovieInput = $('#searchMovieInput').val();
+			var searchMovieDurationFrom = $('#durationFrom').val();
+			var searchMovieDurationTo = $('#durationTo').val();
 			var params = {
 					'searchOptionsBox': $searchOptionBox.val(),
-					'searchMovieInput': searchMovieInput
+					'searchMovieInput': searchMovieInput,
+					'durationMin': searchMovieDurationFrom,
+					'durationMax': searchMovieDurationTo
 			};
 			$('#moviesTable1').dataTable().fnClearTable();
 			$.get('SearchMoviesServlet', params, function(data) {
@@ -444,9 +448,13 @@ var MoviesManager = {
 		searchMoviesAdmin : function() {
 			var $searchOptionBox = $('#searchOptionsBox').find('option:selected');
 			var searchMovieInput = $('#searchMovieInput').val();
+			var searchMovieDurationFrom = $('#durationFrom').val();
+			var searchMovieDurationTo = $('#durationTo').val();
 			var params = {
 					'searchOptionsBox': $searchOptionBox.val(),
-					'searchMovieInput': searchMovieInput
+					'searchMovieInput': searchMovieInput,
+					'durationMin': searchMovieDurationFrom,
+					'durationMax': searchMovieDurationTo
 			};
 			$('#moviesTable1').dataTable().fnClearTable();
 			$.get('SearchMoviesServlet', params, function(data) {
@@ -485,12 +493,13 @@ var MoviesManager = {
 		},
 		
 		searchMoviesByDuration : function() {
+			var $searchOptionBox = $('#searchOptionsBox').find('option:selected');
 			var searchMovieDurationFrom = $('#durationFrom').val();
 			var searchMovieDurationTo = $('#durationTo').val();
 			var params = {
-					'searchOptionsBox': 'duration',
-					'durationFrom': searchMovieDurationFrom,
-					'durationTo': searchMovieDurationTo
+					'searchOptionsBox': $searchOptionBox.val(),
+					'durationMin': searchMovieDurationFrom,
+					'durationMax': searchMovieDurationTo
 			};
 			$('#moviesTable1').dataTable().fnClearTable();
 			$.get('SearchMoviesServlet', params, function(data) {
@@ -530,10 +539,11 @@ var MoviesManager = {
 		},
 		
 		searchMoviesByDurationAdmin : function() {
+			var $searchOptionBox = $('#searchOptionsBox').find('option:selected');
 			var searchMovieDurationFrom = $('#durationFrom').val();
 			var searchMovieDurationTo = $('#durationTo').val();
 			var params = {
-					'searchOptionsBox': 'duration',
+					'searchOptionsBox': $searchOptionBox.val(),
 					'durationFrom': searchMovieDurationFrom,
 					'durationTo': searchMovieDurationTo
 			};
@@ -843,6 +853,39 @@ var UsersManager = {
 			$.post('UserServlet', params, function(data){
 				console.log(data);
 			});
+		},
+		
+		searchUsers : function() {
+			var $searchUserRoleDropdown = $('#newUserRole').find('option:selected');
+			var usernameSearchInput = $('#usernameInputSearch').val();
+			var userRole = $searchUserRoleDropdown.val();
+			if (userRole === 'Select role') {
+				userRole = '';
+			}
+			var params = {
+					'usernameSearchInput': usernameSearchInput,
+					'roleSearchInput': userRole
+			};
+			$('#usersTable1').dataTable().fnDestroy();
+			$.get('SearchUsersServlet', params, function(data){
+				$('#usersTable1').DataTable ({
+					data: data.filteredUsers,
+					paging: false,
+					info: false,
+					searching: false,
+					autoWidth: true,
+					columns: [
+							{
+							"data": 'username',
+							render:function(data, type, row){
+								return '<a id="userRedirectFromTable" data-id="' + row.id + '" href="#">' + data + '</a>';
+								}
+							},
+							{data : 'dateOutput'},
+							{data : 'role'}
+						]
+				})
+			})
 		}
 }
 
@@ -1231,6 +1274,7 @@ $(document).ready(function() {
 	
 	$('#searchMovieBtn').click(function(e) {
 		e.preventDefault();
+		var $searchOptionBox = $('#searchOptionsBox').find('option:selected'); 
 		params = {
 				'action':'loggedInUserRole'
 		};
@@ -1241,28 +1285,20 @@ $(document).ready(function() {
 			if(data.loggedInUserRole === "USER"){
 				MoviesManager.searchMovies();
 			}
-			
-		});
-		MoviesManager.searchMovies();
-	});
-	
-	$('#durationSearchBtn').click(function(e) {
-		e.preventDefault();
-		params = {
-				'action':'loggedInUserRole'
-		};
-		$.get('UserServlet', params, function(data){
-			if(data.loggedInUserRole === "ADMIN") {
+			if($searchOptionBox.val() === 'searchMoviesBy' && data.loggedInUserRole === "ADMIN"){
 				MoviesManager.searchMoviesByDurationAdmin();
 			}
-			if(data.loggedInUserRole === "USER"){
+			if($searchOptionBox.val() === 'searchMoviesBy' && data.loggedInUserRole === "USER"){
 				MoviesManager.searchMoviesByDuration();
 			}
 			
 		});
-		MoviesManager.searchMoviesByDuration();
+		MoviesManager.searchMovies();
+		if($searchOptionBox.val() === 'searchMoviesBy'){
+			MoviesManager.searchMoviesByDuration();
+		}
+		console.log($searchOptionBox.val());
 	});
-	
 	
 	
 	$('#btnConfirmLogin').click(function(e) {
@@ -1627,6 +1663,11 @@ $(document).ready(function() {
     	StateManager.loggingState();
     	alert('Successfully registered, please log in now!');
     	
+    })
+    
+    $('#submitUserFilter').click(function(e){
+    	e.preventDefault();
+    	UsersManager.searchUsers();
     })
     
 	

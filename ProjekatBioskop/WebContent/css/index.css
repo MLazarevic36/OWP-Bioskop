@@ -86,38 +86,8 @@ a {
 	background-color: white;
 }
 
-#moviesSearchBox {
-	width:100%;
-	position:relative;
-}
-
-
-#searchOptions {
-
-	float:left;
-	position:relative;
-}
-
- #searchMovieInputBox {
-
- 	float:left;
- 	position:relative;
  
- }
- 
- #searchMovieBtnBox {
-
- 	float:left;
- 	position:relative;
- }
- 
- #durationSearch {
- 	float:right;
- 	position:relative;
- 	width:25%;
- }
- 
- #labelFrom, #labelTo, #labelF, #labelT, #labelMin, #labelMax {
+ #labelFrom, #labelTo, #labelF, #labelT, #labelMin, #labelMax, #labelU {
 	color: black;
 }
 
@@ -130,6 +100,18 @@ a {
 }
 
 #projectionFilterTicket {
+	flex: 1;
+}
+
+#wrapperUser {
+  display: flex;
+}
+
+#usernameSearch {
+	flex: 1 1 45%;
+}
+
+#roleSearch {
 	flex: 1;
 }
 

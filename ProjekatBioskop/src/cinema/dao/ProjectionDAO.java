@@ -306,7 +306,7 @@ public static List<Projection> getAll() {
 			
 			rs = ps.executeQuery();
 			
-			
+			System.out.println(query);
 			
 			while (rs.next()) {
 				int index = 1;

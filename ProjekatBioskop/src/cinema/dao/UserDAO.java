@@ -9,6 +9,9 @@ import java.util.Date;
 import java.util.List;
 
 import cinema.entity.Movie;
+import cinema.entity.Projection;
+import cinema.entity.ProjectionType;
+import cinema.entity.Theater;
 import cinema.entity.User;
 import cinema.entity.User.Role;
 
@@ -268,5 +271,68 @@ public class UserDAO {
 		
 		return false;
 	}
+	
+	public static List<User> searchUsers(String username, String role) {
+
+		List<User> users = new ArrayList<>();
+		
+		Connection con = ConnectionManager.getConnection();
+		
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+			String query = "SELECT * FROM users WHERE registrationdate > '2016-01-01'";
+		
+		if (username != null && username != "") {
+			query += " AND username LIKE ?";
+		}
+		if (role != null && role != "") {
+			query += " AND role = ?";
+		}
+		
+		ps = con.prepareStatement(query);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		
+		int indexx = 1;
+		if (username != null && username != "") {
+			ps.setString(indexx++, "%" + username + "%");
+		}
+		if (role != null && role != "") {
+			ps.setString(indexx++, role);
+		}
+
+		rs = ps.executeQuery();
+		
+		while (rs.next()) {
+			int index = 1;
+			int id = rs.getInt(index++);
+			String username_rs = rs.getString(index++);
+			String password = rs.getString(index++);
+			String registrationdate = rs.getString(index++);
+			String role_rs = rs.getString(index++);
+			Date date = sdf.parse(registrationdate);
+			User user = new User();
+			user.setId(id);
+			user.setUsername(username_rs);
+			user.setPassword(password);
+			user.setRegistrationDate(date);
+			user.setRole(Role.valueOf(role_rs));
+			user.setDateOutput(registrationdate);
+			
+			users.add(user);
+		
+		}
+		
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			try {ps.close();} catch (Exception ex1) {ex1.printStackTrace();}
+			try {rs.close();} catch (Exception ex1) {ex1.printStackTrace();}
+		}
+		
+			return users;
+		}
 	
 }

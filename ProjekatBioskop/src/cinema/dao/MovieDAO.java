@@ -56,7 +56,7 @@ public class MovieDAO {
 		return movies;
 	}
 	
-	public static List<Movie> searchMoviesByTitle(String title) {
+	public static List<Movie> searchMoviesByTitle(String title, String durationMin, String durationMax) {
 		List<Movie> movies = new ArrayList<>();
 		
 		Connection con = ConnectionManager.getConnection();
@@ -64,13 +64,24 @@ public class MovieDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
-		String query = "SELECT * FROM movies WHERE title LIKE ?";
-		
 		try {
+			
+			String query = "SELECT * FROM movies WHERE title LIKE ?";
+			
+			if (durationMin != null && durationMin != "" && durationMax != null && durationMax != "") {
+				query += " AND duration BETWEEN ? AND ?";
+			}
 			ps = con.prepareStatement(query);
+			
 			int index = 1;
 			ps.setString(index++, "%" + title + "%");
+			if (durationMin != null && durationMin != "" && durationMax != null && durationMax != "") {
+				ps.setString(index++, durationMin);
+				ps.setString(index++, durationMax);
+			}
 			rs = ps.executeQuery();
+			System.out.println(query);
+			
 			while (rs.next()) {
 				index = 1;
 				int id = rs.getInt(index++);
@@ -90,8 +101,6 @@ public class MovieDAO {
 				
 				movies.add(movie);
 				
-				System.out.println(ps);
-				
 			}
 			
 		} catch (Exception e) {
@@ -107,7 +116,7 @@ public class MovieDAO {
 		
 	}
 	
-	public static List<Movie> searchMoviesByDistributor(String distributor) {
+	public static List<Movie> searchMoviesByDistributor(String distributor, String durationMin, String durationMax) {
 		List<Movie> movies = new ArrayList<>();
 		
 		Connection con = ConnectionManager.getConnection();
@@ -117,10 +126,18 @@ public class MovieDAO {
 		
 		String query = "SELECT * FROM movies WHERE distributor LIKE ?";
 		
+		if (durationMin != null && durationMin != "" && durationMax != null && durationMax != "") {
+			query += " AND duration BETWEEN ? AND ?";
+		}
+		
 		try {
 			ps = con.prepareStatement(query);
 			int index = 1;
 			ps.setString(index++, "%" + distributor + "%");
+			if (durationMin != null && durationMin != "" && durationMax != null && durationMax != "") {
+				ps.setString(index++, durationMin);
+				ps.setString(index++, durationMax);
+			}
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				index = 1;
@@ -141,8 +158,6 @@ public class MovieDAO {
 				
 				movies.add(movie);
 				
-				System.out.println(ps);
-				
 			}
 			
 		} catch (Exception e) {
@@ -158,7 +173,7 @@ public class MovieDAO {
 		
 	}
 	
-	public static List<Movie> searchMoviesByOriginCountry(String originCountry) {
+	public static List<Movie> searchMoviesByOriginCountry(String originCountry, String durationMin, String durationMax) {
 		List<Movie> movies = new ArrayList<>();
 		
 		Connection con = ConnectionManager.getConnection();
@@ -168,10 +183,18 @@ public class MovieDAO {
 		
 		String query = "SELECT * FROM movies WHERE origincountry LIKE ?";
 		
+		if (durationMin != null && durationMin != "" && durationMax != null && durationMax != "") {
+			query += " AND duration BETWEEN ? AND ?";
+		}
+		
 		try {
 			ps = con.prepareStatement(query);
 			int index = 1;
 			ps.setString(index++, "%" + originCountry + "%");
+			if (durationMin != null && durationMin != "" && durationMax != null && durationMax != "") {
+				ps.setString(index++, durationMin);
+				ps.setString(index++, durationMax);
+			}
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				index = 1;
@@ -192,8 +215,6 @@ public class MovieDAO {
 				
 				movies.add(movie);
 				
-				System.out.println(ps);
-				
 			}
 			
 		} catch (Exception e) {
@@ -209,7 +230,7 @@ public class MovieDAO {
 		
 	}
 	
-	public static List<Movie> searchMoviesByYearOfProduction(String yearOfProduction) {
+	public static List<Movie> searchMoviesByYearOfProduction(String yearOfProduction, String durationMin, String durationMax) {
 		List<Movie> movies = new ArrayList<>();
 		
 		Connection con = ConnectionManager.getConnection();
@@ -221,10 +242,18 @@ public class MovieDAO {
 		
 		String query = "SELECT * FROM movies WHERE yearofproduction = ?";
 		
+		if (durationMin != null && durationMin != "" && durationMax != null && durationMax != "") {
+			query += " AND duration BETWEEN ? AND ?";
+		}
+		
 		try {
 			ps = con.prepareStatement(query);
 			int index = 1;
 			ps.setInt(index++, year);
+			if (durationMin != null && durationMin != "" && durationMax != null && durationMax != "") {
+				ps.setString(index++, durationMin);
+				ps.setString(index++, durationMax);
+			}
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				index = 1;
@@ -245,8 +274,6 @@ public class MovieDAO {
 				
 				movies.add(movie);
 				
-				System.out.println(ps);
-				
 			}
 			
 		} catch (Exception e) {
@@ -262,7 +289,7 @@ public class MovieDAO {
 		
 	}
 	
-	public static List<Movie> searchMoviesByDuration(Integer durationMin, Integer durationMax) {
+	public static List<Movie> searchMoviesByDuration(String durationMin, String durationMax) {
 		List<Movie> movies = new ArrayList<>();
 		
 		Connection con = ConnectionManager.getConnection();
@@ -276,8 +303,8 @@ public class MovieDAO {
 		try {
 			ps = con.prepareStatement(query);
 			int index = 1;
-			ps.setInt(index++, durationMin);
-			ps.setInt(index++, durationMax);
+			ps.setString(index++, durationMin);
+			ps.setString(index++, durationMax);
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				index = 1;
