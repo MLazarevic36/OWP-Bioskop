@@ -13,12 +13,14 @@ public class User {
 	private Date registrationDate;
 	private Role role;
 	private String dateOutput;
+	private Integer deleted;
 	
 	public User() {
 		
 	}
 	
-	public User(Integer id, String username, String password, Date registrationDate, Role role, String dateOutput) {
+	public User(Integer id, String username, String password, Date registrationDate, Role role, 
+			String dateOutput, Integer deleted) {
 		
 		this.id = id;
 		this.username = username;
@@ -26,6 +28,7 @@ public class User {
 		this.registrationDate = registrationDate;
 		this.role = role;
 		this.dateOutput = dateOutput;
+		this.deleted = deleted;
 		
 	}
 
@@ -94,6 +97,14 @@ public class User {
 	
 	public void setDateOutput(String dateOutput) {
 		this.dateOutput = dateOutput;
+	}
+
+	public Integer getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
 	}
 	
 	

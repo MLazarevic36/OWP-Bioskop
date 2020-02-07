@@ -20,7 +20,7 @@ public class MovieDAO {
 		ResultSet rs = null;
 		
 		try {
-			String query = "SELECT * FROM movies";
+			String query = "SELECT * FROM movies WHERE deleted = 0";
 			
 			ps = con.prepareStatement(query);
 			
@@ -66,7 +66,7 @@ public class MovieDAO {
 		
 		try {
 			
-			String query = "SELECT * FROM movies WHERE title LIKE ?";
+			String query = "SELECT * FROM movies WHERE title LIKE ? AND deleted = 0";
 			
 			if (durationMin != null && durationMin != "" && durationMax != null && durationMax != "") {
 				query += " AND duration BETWEEN ? AND ?";
@@ -124,7 +124,7 @@ public class MovieDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
-		String query = "SELECT * FROM movies WHERE distributor LIKE ?";
+		String query = "SELECT * FROM movies WHERE distributor LIKE ? AND deleted = 0";
 		
 		if (durationMin != null && durationMin != "" && durationMax != null && durationMax != "") {
 			query += " AND duration BETWEEN ? AND ?";
@@ -181,7 +181,7 @@ public class MovieDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
-		String query = "SELECT * FROM movies WHERE origincountry LIKE ?";
+		String query = "SELECT * FROM movies WHERE origincountry LIKE ? AND deleted = 0";
 		
 		if (durationMin != null && durationMin != "" && durationMax != null && durationMax != "") {
 			query += " AND duration BETWEEN ? AND ?";
@@ -240,7 +240,7 @@ public class MovieDAO {
 		
 		Integer year = Integer.parseInt(yearOfProduction);
 		
-		String query = "SELECT * FROM movies WHERE yearofproduction = ?";
+		String query = "SELECT * FROM movies WHERE yearofproduction = ? AND deleted = 0";
 		
 		if (durationMin != null && durationMin != "" && durationMax != null && durationMax != "") {
 			query += " AND duration BETWEEN ? AND ?";
@@ -298,7 +298,7 @@ public class MovieDAO {
 		ResultSet rs = null;
 		
 		
-		String query = "SELECT * FROM movies WHERE duration BETWEEN ? AND ?";
+		String query = "SELECT * FROM movies WHERE deleted = 0 AND duration BETWEEN ? AND ?";
 		
 		try {
 			ps = con.prepareStatement(query);
@@ -345,8 +345,8 @@ public class MovieDAO {
 		PreparedStatement ps = null;
 		
 		try {
-			String query = "INSERT INTO movies (title, duration, distributor, origincountry, yearofproduction) "
-							+ "VALUES (?, ?, ?, ?, ?)";
+			String query = "INSERT INTO movies (title, duration, distributor, origincountry, yearofproduction, deleted) "
+							+ "VALUES (?, ?, ?, ?, ?, 0)";
 			ps = con.prepareStatement(query);
 			int index = 1;
 			ps.setString(index++, movie.getTitle());
@@ -385,6 +385,25 @@ public class MovieDAO {
 		
 		return false;
 	}
+	
+	public static boolean logicDelete(Integer id) throws Exception {
+		Connection con = ConnectionManager.getConnection();
+		PreparedStatement ps = null;
+		try {
+			String query = "UPDATE movies SET deleted = 1 WHERE id = ?";
+			ps = con.prepareStatement(query);
+			int index = 1;
+			ps.setInt(index++, id);
+			
+			return ps.executeUpdate() == 1;
+					
+		}finally {
+			try {ps.close();} catch (Exception ex1) {ex1.printStackTrace();}
+		}
+		
+	}
+	
+	
 	
 	public static Movie get(Integer id) throws Exception {
 		Connection con = ConnectionManager.getConnection();

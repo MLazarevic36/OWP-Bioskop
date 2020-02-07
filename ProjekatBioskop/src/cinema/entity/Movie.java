@@ -1,6 +1,5 @@
 package cinema.entity;
 
-import java.util.Comparator;
 
 public class Movie {
 	
@@ -10,13 +9,14 @@ public class Movie {
 	private String distributor;
 	private String originCountry;
 	private Integer yearOfProduction;
+	private Integer deleted;
 	
 	public Movie() {
 		
 	}
 
 	public Movie(Integer id, String title, String duration, String distributor, String originCountry,
-			Integer yearOfProduction) {
+			Integer yearOfProduction, Integer deleted) {
 		
 		this.id = id;
 		this.title = title;
@@ -24,6 +24,7 @@ public class Movie {
 		this.distributor = distributor;
 		this.originCountry = originCountry;
 		this.yearOfProduction = yearOfProduction;
+		this.deleted = deleted;
 	}
 
 	public Integer getId() {
@@ -73,5 +74,15 @@ public class Movie {
 	public void setYearOfProduction(Integer yearOfProduction) {
 		this.yearOfProduction = yearOfProduction;
 	}
+
+	public Integer getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+	
+	
 	
 }

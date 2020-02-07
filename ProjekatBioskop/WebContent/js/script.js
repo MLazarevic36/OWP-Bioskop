@@ -193,7 +193,9 @@ var ProjectionsManager = {
 					'id': ID
 			};
 			$.get('ProjectionServlet', params, function(data){
+				$('#projectionTicketsTable1').dataTable().fnDestroy();
 				TicketManager.getAllByProjection(data.projection.id);
+				$('#hiddenProjectionDetailId').text();
 				$('#projectionTitle').text('');
 				$('#projectionDateAndTime').text('');
 				$('#projectionType').text('');
@@ -204,16 +206,21 @@ var ProjectionsManager = {
 				$('#projectionType').append('Type: ' + data.projection.projectionType);
 				$('#projectionTheater').append('Theater: ' + data.projection.theater);
 				$('#projectionTicketPrice').append('Ticket price: ' + data.projection.ticketPrice);
+				$('#hiddenProjectionDetailId').val(data.projection.id);
 			} );
 			
+		},
+		
+		deleteProjectionLogic : function(ID) {
+			params = {
+				'action':'deleteProjectionLogic',
+				'id': ID
+			};
+			$.post('ProjectionsServlet', params, function(data){
+				window.location.reload();
+			});
 		}
 }
-
-var SeatManager = {
-		
-		
-}
-
 
 var TicketManager = {
 		
@@ -841,6 +848,18 @@ var UsersManager = {
 			})
 		},
 		
+		deleteUserLogic: function(ID) {
+			params = {
+					'action': 'deleteUserLogic',
+					'user-id': ID
+			};
+			$.post('UserServlet', params, function(data){
+				console.log(data);
+			})
+		},
+		
+		
+		
 		registerUser : function() {
 			var regUsername = $('#RegUsername').val();
 			var regPassword = $('#RegPassword').val();
@@ -919,7 +938,7 @@ var StateManager = {
 					$('#singleTicket').hide();
 					$('#projectionTicketsTable').hide();
 				}
-				if(data.loggedInUserRole === "USER") {
+				else if(data.loggedInUserRole === "USER") {
 					$('#ProfileBtn').show();
 					$('#UsersBtn').hide();
 					$('#LoginBtn').hide();
@@ -941,26 +960,27 @@ var StateManager = {
 					$('#userDetail').hide();
 					$('#singleTicket').hide();
 					$('#projectionTicketsTable').hide();
-				}
+				}else {
+					$('#ProfileBtn').hide();
+					$('#UsersBtn').hide();
+					$('#LogoutBtn').hide();
+					$('#LoginForm').hide();
+					$('#RegisterForm').hide();
+					$('#moviesSection').hide();
+					$('#movieDetail').hide();
+					$('#projectionDetail').hide();
+					$('#movieCommands').hide();
+					$('#addProjectionForm').hide();
+					$('#addNewProjection').hide();
+					$('#projectionsCommands').hide();
+					$('#buyTicketFromMovieSection').hide();
+					$('#usersSection').hide();
+					$('#ticketDetail').hide();
+					$('#userDetail').hide();
+					$('#singleTicket').hide();
+					$('#projectionTicketsTable').hide();
+			}
 			})
-			$('#ProfileBtn').hide();
-			$('#UsersBtn').hide();
-			$('#LogoutBtn').hide();
-			$('#LoginForm').hide();
-			$('#RegisterForm').hide();
-			$('#moviesSection').hide();
-			$('#movieDetail').hide();
-			$('#projectionDetail').hide();
-			$('#movieCommands').hide();
-			$('#addProjectionForm').hide();
-			$('#addNewProjection').hide();
-			$('#projectionsCommands').hide();
-			$('#buyTicketFromMovieSection').hide();
-			$('#usersSection').hide();
-			$('#ticketDetail').hide();
-			$('#userDetail').hide();
-			$('#singleTicket').hide();
-			$('#projectionTicketsTable').hide();
 		},
 		
 		loggingState: function(){
@@ -1042,7 +1062,7 @@ var StateManager = {
 					$('#projectionTicketsTable').hide();
 					
 				}
-				if(data.loggedInUserRole === "USER") {
+				else if(data.loggedInUserRole === "USER") {
 					$('#ProfileBtn').hide();
 					$('#UsersBtn').hide();
 					$('#LogoutBtn').hide();
@@ -1061,26 +1081,26 @@ var StateManager = {
 					$('#userDetail').hide();
 					$('#singleTicket').hide();
 					$('#projectionTicketsTable').hide();
-				}
+				}else {
+					$('#ProfileBtn').hide();
+					$('#UsersBtn').hide();
+					$('#LogoutBtn').hide();
+					$('#LoginForm').hide();
+					$('#RegisterForm').hide();
+					$('#moviesSection').show();
+					$('#addMovieForm').hide();
+					$('#movieDetail').hide();
+					$('#projectionsSection').hide();
+					$('#addNewMovie').hide();
+					$('#projectionsCommands').hide();
+					$('#projectionDetail').hide();
+					$('#buyTicketFromMovieSection').hide();
+					$('#usersSection').hide();
+					$('#userDetail').hide();
+					$('#singleTicket').hide();
+					$('#projectionTicketsTable').hide();
+			}
 			})
-			$('#ProfileBtn').hide();
-			$('#UsersBtn').hide();
-			$('#LogoutBtn').hide();
-			$('#LoginForm').hide();
-			$('#RegisterForm').hide();
-			$('#moviesSection').show();
-			$('#addMovieForm').hide();
-			$('#movieDetail').hide();
-			$('#projectionsSection').hide();
-			$('#addNewMovie').hide();
-			$('#projectionsCommands').hide();
-			$('#projectionDetail').hide();
-			$('#buyTicketFromMovieSection').hide();
-			$('#usersSection').hide();
-			$('#userDetail').hide();
-			$('#singleTicket').hide();
-			$('#projectionTicketsTable').hide();
-			
 		},
 		
 		detailedMovieState: function(){
@@ -1104,7 +1124,7 @@ var StateManager = {
 					$('#singleTicket').hide();
 					$('#projectionTicketsTable').hide();
 				}
-				if(data.loggedInUserRole === "USER") {
+				else if(data.loggedInUserRole === "USER") {
 					$('#movieDetail').show();
 					$('#movieCommands').show();
 					$('#deleteMovieFromDetail').hide();
@@ -1119,17 +1139,18 @@ var StateManager = {
 					$('#userDetail').hide();
 					$('#singleTicket').hide();
 					$('#projectionTicketsTable').hide();
+				} else {
+					$('#movieDetail').show();
+					$('#updateMovieForm').hide();
+					$('#moviesSection').hide();
+					$('#projectionsCommands').hide();
+					$('#buyTicketFromMovieSection').hide();
+					$('#projectionDetail').hide();
+					$('#usersSection').hide();
+					$('#userDetail').hide();
+					$('#singleTicket').hide();
+					$('#projectionTicketsTable').hide();
 				}
-			$('#movieDetail').show();
-			$('#updateMovieForm').hide();
-			$('#moviesSection').hide();
-			$('#projectionsCommands').hide();
-			$('#buyTicketFromMovieSection').hide();
-			$('#projectionDetail').hide();
-			$('#usersSection').hide();
-			$('#userDetail').hide();
-			$('#singleTicket').hide();
-			$('#projectionTicketsTable').hide();
 			});
 		},
 		
@@ -1147,18 +1168,19 @@ var StateManager = {
 					$('#projectionTicketsTable').show();
 					
 						
-				}
-				if(data.loggedInUserRole === "USER") {
+				} else if(data.loggedInUserRole === "USER") {
 					$('#projectionsSection').hide();
 					$('#projectionsCommands').show();
 					$('#deleteProjectionFromDetail').hide();
 					$('#buyTicketFromMovieSection').hide();
 					$('#projectionDetail').show();
 
+				} else {
+					$('#projectionsSection').hide();
+					$('#buyTicketFromMovieSection').hide();
+					$('#projectionDetail').show();
+			
 				}
-			$('#projectionsSection').hide();
-			$('#buyTicketFromMovieSection').hide();
-			$('#projectionDetail').show();
 			});
 		},
 		
@@ -1227,10 +1249,7 @@ var StateManager = {
 			    	$('#projectionTicketsTable').hide();
 			    	$('#updateUserPassword').hide();
 			    	$('#updateUserRole').hide();
-			    	
-						
-				}
-				if(data.loggedInUserRole === "USER") {
+				} else if(data.loggedInUserRole === "USER") {
 					$('#projectionsSection').hide();
 					$('#ticketsTable1').dataTable().fnDestroy();
 					$('#userDetail').show();
@@ -1341,17 +1360,25 @@ $(document).ready(function() {
 	$('#deleteUser').click(function(e){
 		e.preventDefault();
 		var user_id = $('#hiddenUserId').val();
-		UsersManager.deleteUser(user_id);
-		$('#userDetail').hide();
-		$('#usersTable1').dataTable().fnDestroy();
-		UsersManager.getAll();
-		StateManager.usersState();
-		alert('Successfully deleted user!');
+		var table = $('#ticketsTable1').DataTable();
+		if (! table.data().any()) {
+			UsersManager.deleteUser(user_id);
+			$('#userDetail').hide();
+			$('#usersTable1').dataTable().fnDestroy();
+			UsersManager.getAll();
+			StateManager.usersState();
+			alert('Successfully deleted user!');
+		} else {
+			UsersManager.deleteUserLogic(user_id);
+			$('#userDetail').hide();
+			$('#usersTable1').dataTable().fnDestroy();
+			UsersManager.getAll();
+			StateManager.usersState();
+			alert('Successfully deleted user!');
+		}
+		
+		
 	});
-	
-	
-	
-	
 	
 	$('#LogoutBtn').click(function(e) {
 		e.preventDefault();
@@ -1637,17 +1664,21 @@ $(document).ready(function() {
     	e.preventDefault();
     	UsersManager.populateCurrentUserProfile();
     	StateManager.userProfileState();
+    	$('#projectionsCommands').hide();
     });
     
     $('#deleteTicket').click(function(e){
     	var baseUrl = (window.location).href;
     	var ticket_id = baseUrl.substring(baseUrl.lastIndexOf('=') + 1);
     	var user_id = $('#hiddenUserId').val();
+    	var projection_id = $('#hiddenProjectionDetailId').val();
     	TicketManager.deleteTicket(ticket_id);
     	$('#singleTicket').hide();
     	alert('Successfully deleted ticket!');
     	$('#ticketsTable1').dataTable().fnDestroy();
+    	$('#projectionTicketsTable1').dataTable().fnDestroy();
 		TicketManager.getAll(user_id);
+		TicketManager.getAllByProjection(projection_id);
     	
     });
 	
@@ -1668,6 +1699,16 @@ $(document).ready(function() {
     $('#submitUserFilter').click(function(e){
     	e.preventDefault();
     	UsersManager.searchUsers();
+    });
+    
+    
+    $('#deleteProjectionFromDetail').click(function(e){
+    	e.preventDefault();
+    	var id = $('#hiddenProjectionDetailId').val();
+    	ProjectionsManager.deleteProjectionLogic(id);
+    
+    	
+    	
     })
     
 	

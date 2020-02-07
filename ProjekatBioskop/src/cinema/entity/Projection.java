@@ -12,13 +12,14 @@ public class Projection {
 	private double ticketPrice;
 	private Integer adminCreator;
 	private String dateOutput;
+	private Integer deleted;
 	
 	public Projection() {
 		
 	}
 
 	public Projection(Integer id, String movie, String projectionType, String theater, Date dateAndTime,
-			double ticketPrice, Integer adminCreator, String dateOutput) {
+			double ticketPrice, Integer adminCreator, String dateOutput, Integer deleted) {
 		
 		this.id = id;
 		this.movie = movie;
@@ -28,6 +29,7 @@ public class Projection {
 		this.ticketPrice = ticketPrice;
 		this.adminCreator = adminCreator;
 		this.dateOutput = dateOutput;
+		this.deleted = deleted;
 	}
 
 	public Integer getId() {
@@ -92,6 +94,14 @@ public class Projection {
 
 	public void setDateOutput(String dateOutput) {
 		this.dateOutput = dateOutput;
+	}
+
+	public Integer getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
 	}
 	
 	

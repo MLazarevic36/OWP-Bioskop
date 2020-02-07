@@ -62,7 +62,7 @@ public class MoviesServlet extends HttpServlet {
 			case "delete": {
 				String id = request.getParameter("id");
 				Integer delete_id = Integer.parseInt(id);
-				MovieDAO.delete(delete_id);
+				MovieDAO.logicDelete(delete_id);
 				break;
 			}
 			case "getMovie": {

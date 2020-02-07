@@ -1,22 +1,16 @@
 package cinema.servlet;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import cinema.dao.MovieDAO;
 import cinema.dao.UserDAO;
-import cinema.entity.Movie;
 import cinema.entity.User;
 
+@SuppressWarnings("serial")
 public class UserServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -84,6 +78,12 @@ public class UserServlet extends HttpServlet {
 				String register_username = request.getParameter("registerUsername");
 				String register_password = request.getParameter("registerPassword");
 				UserDAO.addUser(register_username, register_password);
+				break;
+			}
+			case "deleteUserLogic": {
+				String id = request.getParameter("user-id");
+				Integer user_id = Integer.parseInt(id);
+				UserDAO.logicDelete(user_id);
 				break;
 			}
 			}

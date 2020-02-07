@@ -7,11 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import cinema.entity.Movie;
-import cinema.entity.Projection;
-import cinema.entity.ProjectionType;
-import cinema.entity.Theater;
 import cinema.entity.User;
 import cinema.entity.User.Role;
 
@@ -112,7 +107,7 @@ public class UserDAO {
 		ResultSet rs = null;
 		
 		try {
-			String query = "SELECT * FROM users";
+			String query = "SELECT * FROM users WHERE deleted = 0";
 			
 			ps = con.prepareStatement(query);
 			
@@ -246,13 +241,30 @@ public class UserDAO {
 		return false;
 	}
 	
+	public static boolean logicDelete(Integer id) throws Exception {
+		Connection con = ConnectionManager.getConnection();
+		PreparedStatement ps = null;
+		try {
+			String query = "UPDATE users SET deleted = 1 WHERE id = ?";
+			ps = con.prepareStatement(query);
+			int index = 1;
+			ps.setInt(index++, id);
+			
+			return ps.executeUpdate() == 1;
+					
+		}finally {
+			try {ps.close();} catch (Exception ex1) {ex1.printStackTrace();}
+		}
+		
+	}
+	
 	public static boolean addUser(String username, String password) {
 		Connection con = ConnectionManager.getConnection();
 		PreparedStatement ps = null;
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		try {
-			String query = "INSERT INTO users (username, password, registrationdate, role) "
-							+ "VALUES (?, ?, ?, ?)";
+			String query = "INSERT INTO users (username, password, registrationdate, role, deleted) "
+							+ "VALUES (?, ?, ?, ?, 0)";
 			ps = con.prepareStatement(query);
 			int index = 1;
 			Date date = new Date();
@@ -282,7 +294,7 @@ public class UserDAO {
 		ResultSet rs = null;
 		
 		try {
-			String query = "SELECT * FROM users WHERE registrationdate > '2016-01-01'";
+			String query = "SELECT * FROM users WHERE deleted = 0";
 		
 		if (username != null && username != "") {
 			query += " AND username LIKE ?";

@@ -25,7 +25,7 @@ public static List<Projection> getAll() {
 		ResultSet rs = null;
 		
 		try {
-			String query = "SELECT * FROM projections WHERE dateandtime >= '2020-02-11' ORDER BY movie, dateandtime";
+			String query = "SELECT * FROM projections WHERE dateandtime BETWEEN '2020-02-11 00:00' AND '2020-02-11 23:59' AND deleted = 0 ORDER BY movie, dateandtime";
 			
 			ps = con.prepareStatement(query);
 			
@@ -75,8 +75,8 @@ public static List<Projection> getAll() {
 		PreparedStatement ps = null;
 		
 		try {
-			String query = "INSERT INTO projections (movie, projectiontype, theater, dateandtime, ticketprice, admincreator) "
-						   + "VALUES (?, ?, ?, ?, ?, ?)";
+			String query = "INSERT INTO projections (movie, projectiontype, theater, dateandtime, ticketprice, admincreator, deleted) "
+						   + "VALUES (?, ?, ?, ?, ?, ?, 0)";
 			ps = con.prepareStatement(query);
 			int index = 1;
 			Movie movie = MovieDAO.getByTitle(projection.getMovie());
@@ -200,7 +200,7 @@ public static List<Projection> getAll() {
 		ResultSet rs = null;
 		
 		try {
-			String query = "SELECT * FROM projections WHERE movie = ?";
+			String query = "SELECT * FROM projections WHERE movie = ? AND dateandtime >= '2020-02-11'";
 			
 			ps = con.prepareStatement(query);
 			ps.setInt(1, movie_id);
@@ -257,7 +257,7 @@ public static List<Projection> getAll() {
 		ResultSet rs = null;
 		
 		try {
-			String query = "SELECT * FROM projections WHERE admincreator = 1";
+			String query = "SELECT * FROM projections WHERE deleted = 0";
 			
 			if (movie != null && movie != "") {
 				query += " AND movie = ?";
@@ -345,7 +345,24 @@ public static List<Projection> getAll() {
 		
 		return projections;
 	}
+		
+	public static boolean logicDelete(Integer id) throws Exception {
+		
+		Connection con = ConnectionManager.getConnection();
+		PreparedStatement ps = null;
+		try {
+			String query = "UPDATE projections SET deleted = 1 WHERE id = ?";
+			ps = con.prepareStatement(query);
+			int index = 1;
+			ps.setInt(index++, id);
+			
+			return ps.executeUpdate() == 1;
+					
+		}finally {
+			try {ps.close();} catch (Exception ex1) {ex1.printStackTrace();}
+		}
 	
+	}
 }
 
 

@@ -106,6 +106,13 @@ public class ProjectionsServlet extends HttpServlet {
 					response.setContentType("application/json");
 					response.getWriter().write(jsonData);
 				}
+				case "deleteProjectionLogic": {
+					String projection_id = request.getParameter("id");
+					Integer id = Integer.parseInt(projection_id);
+					ProjectionDAO.logicDelete(id);
+					System.out.println(projection_id);
+					break;
+				}
 			}
 		}catch (Exception ex) {
 			ex.printStackTrace();
