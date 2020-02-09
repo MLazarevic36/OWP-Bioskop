@@ -870,7 +870,13 @@ var UsersManager = {
 					
 			};
 			$.post('UserServlet', params, function(data){
-				console.log(data);
+				if(data.message === "Username already taken!") {
+					$('#RegisterForm').append('<p style="color:red">' + data.message + '</p>');
+				}else {
+					$('#RegisterForm').hide();
+			    	StateManager.loggingState();
+			    	alert('Successfully registered, please log in now!');
+				}
 			});
 		},
 		
@@ -1412,6 +1418,7 @@ $(document).ready(function() {
 		$('#addMovieForm').toggle();
 		$('#moviesTable1').dataTable().fnDestroy();
         MoviesManager.getAll();
+        StateManager.moviesState();
 	});
 	
 	$('#submitNewProjection').click(function(e){
@@ -1447,8 +1454,9 @@ $(document).ready(function() {
         var id= $(this).attr("data-id");
         MoviesManager.deleteMovie(id);
         $(this).parents("tr").remove();
-        $('#moviesTable1').dataTable().fnDestroy();
+        $('#moviesTable1').DataTable().fnDestroy();
         MoviesManager.getAll();
+        $('#moviesTable1').dataTable().fnSetColumnVis(5, true);
         
     });
     
@@ -1690,9 +1698,6 @@ $(document).ready(function() {
     $('#btnConfirmRegister').click(function(e){
     	e.preventDefault();
     	UsersManager.registerUser();
-    	$('#RegisterForm').hide();
-    	StateManager.loggingState();
-    	alert('Successfully registered, please log in now!');
     	
     })
     

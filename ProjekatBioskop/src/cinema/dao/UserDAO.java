@@ -20,7 +20,7 @@ public class UserDAO {
 		ResultSet rs = null;
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-			String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+			String query = "SELECT * FROM users WHERE username = ? AND password = ? AND deleted = 0";
 			ps = con.prepareStatement(query);
 			ps.setString(1, username);
 			ps.setString(2, password);

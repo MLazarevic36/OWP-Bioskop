@@ -1,12 +1,16 @@
 package cinema.servlet;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import cinema.dao.UserDAO;
 import cinema.entity.User;
 
@@ -77,7 +81,22 @@ public class UserServlet extends HttpServlet {
 			case "registerUser": {
 				String register_username = request.getParameter("registerUsername");
 				String register_password = request.getParameter("registerPassword");
-				UserDAO.addUser(register_username, register_password);
+				String message = "success";
+				User newUser = UserDAO.get(register_username);
+				if (newUser != null) {
+					message = "Username already taken!";
+				}else {
+					UserDAO.addUser(register_username, register_password);
+				}
+				Map<String, Object> data = new HashMap<>();
+				data.put("message", message);
+				
+				ObjectMapper mapper = new ObjectMapper();
+				String jsonData = mapper.writeValueAsString(data);
+				
+				response.setContentType("application/json");
+				response.getWriter().write(jsonData);
+				
 				break;
 			}
 			case "deleteUserLogic": {

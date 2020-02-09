@@ -91,6 +91,7 @@ public class ProjectionsServlet extends HttpServlet {
 					
 					response.setContentType("application/json");
 					response.getWriter().write(jsonDataProjection);
+					break;
 				}
 				case "getProjectionsByMovie": {
 					String movie_id = request.getParameter("id");
@@ -105,7 +106,14 @@ public class ProjectionsServlet extends HttpServlet {
 					
 					response.setContentType("application/json");
 					response.getWriter().write(jsonData);
+					break;
 				}
+//				case "deleteProjection": {
+//					String projection_id = request.getParameter("id");
+//					Integer id = Integer.parseInt(projection_id);
+//					ProjectionDAO.delete(id);
+//					break;
+//				}
 				case "deleteProjectionLogic": {
 					String projection_id = request.getParameter("id");
 					Integer id = Integer.parseInt(projection_id);
